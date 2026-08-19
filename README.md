@@ -7,9 +7,9 @@ Each machine folder has a raw working log, a clean report, and the attack chain 
 
 ### Machines
 
-| Machine | OS | Difficulty | Type | Dependence |
-|---------|-----|-----------|------|----------|
-| [Signed](./signed) | Windows | Medium | Assumed Compromise | Referenced |
+| Machine | OS | Difficulty | Type | Dependence | Date |
+|---------|-----|-----------|------|----------|-------|
+| [Signed](./signed) | Windows | Medium | Assumed Compromise | Referenced | 2026-08-18
 
 
 ---
