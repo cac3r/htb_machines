@@ -7,9 +7,9 @@ Each machine folder has a raw working log, a clean report, and the attack chain 
 
 ### Machines
 
-| Machine | OS | Difficulty | Type | Dependence | Date |
-|---------|-----|-----------|------|----------|-------|
-| [Signed](./signed) | Windows | Medium | Assumed Compromise | Referenced | 2026-08-18
+| Machine | OS | Difficulty | Type | Dependence | Time | Date |
+|---------|-----|-----------|------|----------|-------|------|
+| [Signed](./signed) | Windows | Medium | Assumed Compromise | Referenced | 3h 10min |2026-08-18
 
 
 ---
@@ -19,7 +19,7 @@ Each machine folder has a raw working log, a clean report, and the attack chain 
 How much outside help each box took:
 
 - **Solo** — start to finish with my own methodology and research
-- **Hint** — got unstuck at a single point, then continued on my own
+- **Hint** — got unstuck with writeup/video at a single point, then continued on my own
 - **Referenced** — followed a writeup/video at some point
 
 #### Per-machine structure
