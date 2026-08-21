@@ -1,11 +1,11 @@
 ## TombWatcher
 
 ### Info:
-- Name: TombWatcher
-- OS: Windows
-- Type: Assumed Compromise
-- Difficulty: Medium
-- Status: Retired
+- Name: **TombWatcher**
+- OS: **Windows**
+- Type: **Assumed Compromise**
+- Difficulty: **Medium**
+- Status: **Retired**
 
 ### Content:
 - [**`testing.md`**](https://github.com/cac3r/htb_machines/blob/main/tombwatcher/testing.md)                - Raw notes / working log
