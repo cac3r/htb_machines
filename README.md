@@ -20,7 +20,7 @@ Each machine folder has a raw working log, a clean report, and the attack chain 
 How much outside help each box took:
 
 - **Solo** — start to finish with my own methodology and research
-- **Hint** — got unstuck with writeup/video at a single point, then continued on my own
+- **Hint** — got unstuck with writeup/video at a single point, just a hint for direction
 - **Referenced** — followed a writeup/video at some point
 
 #### Per-machine structure
