@@ -8,10 +8,10 @@
 - Status: Retired
 
 ### Content:
-- `testing.md`                - Raw notes / working log
-- `report.pdf`                - Professional report
-- `attack_chain.png`  - Attack chain diagram
-- `screenshots/`           - Supporting screenshots
+- [**`testing.md`**](https://github.com/cac3r/htb_machines/blob/main/tombwatcher/testing.md)                - Raw notes / working log
+- [**`report.pdf`**](https://github.com/cac3r/htb_machines/blob/main/tombwatcher/report.pdf)                - Professional report
+- [**`attack_chain.png`**](https://github.com/cac3r/htb_machines/blob/main/tombwatcher/attack_chain.png)   - Attack chain diagram
+- **`screenshots/`**           - Supporting screenshots
 
 ### Techniques:
 - ACL Abuse:
