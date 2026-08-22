@@ -20,7 +20,7 @@
 	- ReadGMSAPassword over Machine Abuse - gMSA Dump
 	- ForceChangePassword over User Abuse- Reset user password
 	- WriteOwner over User Abuse - Grant Ownership & Full Control > Change password / Set SPN
-- Bloodhound enumeration with rusthound - Certificates analysis
+- Bloodhound enumeration with rusthound and certipy - Certificates and templates analysis
 - Identify and Revive tombstoned account - Restore with AD PS Module
 - Shadow credentials
 - ADCS Enrollment Agent abuse - ESC3, Crafting certificates
