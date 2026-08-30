@@ -1,11 +1,11 @@
 ## EscapeTwo
 
 ### Info:
-- Name: EscapeTwo
-- OS: Windows
-- Type: Assumed Compromise
-- Difficulty: Easy
-- Status: Retired
+- Name: **EscapeTwo**
+- OS: **Windows**
+- Type: **Assumed Compromise**
+- Difficulty: **Easy**
+- Status: **Retired**
 
 ### Content:
 - [**`testing.md`**](https://github.com/cac3r/htb_machines/blob/main/escapetwo/testing.md)                - Raw notes / working log
