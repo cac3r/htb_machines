@@ -21,7 +21,7 @@ Each machine folder has a raw working log, a clean report, and the attack chain 
 
 How much outside help each box took:
 
-- **Solo** — start to finish with my own methodology and research (no walkthrough/video. Web Browsing applies)
+- **Solo** — start to finish with my own methodology and research (no walkthrough/video. Web Browsing applies. OSCP like)
 - **Hint** — got unstuck with writeup/video at a single point, just a hint for direction/debugging
 - **Referenced** — followed a writeup/video at some point
 
