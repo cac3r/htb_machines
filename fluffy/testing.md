@@ -473,12 +473,20 @@ Start: 10:40 aug 31
 End: 12:30 aug 31
 
 Start: 2026-08-30 21:00 - End: 2026-08-31 12:30
+
 Total Time (Testing): 3h 55min
 
-#### Hint
+##### Hint
 - Debug missmatch when authenticated with administrator certificate
 
-#### Sources
+##### Sources
 - CVE malicious file exploit: https://github.com/ThemeHackers/CVE-2025-24071/
 - ESC16 abuse: https://www.hackingarticles.in/adcs-esc16-security-extension-disabled-on-ca-globally/
 - Debug cert auth naming missmatch: https://www.youtube.com/watch?v=KvUC7bakm-E. Min 35
+
+##### Lesson
+
+- ESC16 is a condition: the CA is configured to omit the SID security extension from the certificates it issues (the OID is in `DisableExtensionList`), CA-wide.
+- UPN injection is the technique used to take advantage of ESC16 presence and abuse the permission (GenericWrite/All) over an account with enrollment rights over a User/Client Auth template.
+- The error when using the certificate after injecting administrator UPN: By the time using the cert, 2 accounts had administrator UPN (the real one and the one I just injected), so DC seeing 2 identical names made that conflict. After renaming the account back to its normal UPN, DC now sees one administrator (the real one) and points to it, and the cert is untouched and preserves its UPN written, so authentication as adminitrator works.
+- DC is the final destination and the one that makes the auth possible, CA is checking the template/config/permissions and crafts the cert.
