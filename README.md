@@ -9,6 +9,7 @@ Each machine folder has a raw working log, a clean report, and the attack chain 
 
 | Machine | OS | Difficulty | Type | User | Root | Dependence | Time | Date | 
 |---------|-----|-----------|------|----------|-------|------|-----|----|
+| [TheFrizz](./TheFrizz) | Windows | Medium | Unauthenticated |   |   | Referenced | 3h 35min |2026-09-01
 | [Fluffy](./fluffy) | Windows | Easy | Assumed Compromise | X | X | Hint | 3h 55min |2026-08-30/31
 | [EscapeTwo](./escapetwo) | Windows | Easy | Assumed Compromise | X | X | Referenced | 4h 20min |2026-08-24/25/26/27
 | [TombWatcher](./tombwatcher) | Windows | Medium | Assumed Compromise | X | X | Referenced | 6h 15min |2026-08-20/21
