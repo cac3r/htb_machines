@@ -40,9 +40,14 @@ Hash - Salt order:
 
 - **System/GSSAPI tools (`ssh -K`, `kinit`, `smbclient -k`, some others): DO need krb5.conf.** These use the operating system's _native_ Kerberos library, which reads `/etc/krb5.conf` to find the KDC. `ssh -K` is squarely in this camp — that's why it, specifically, threw "cannot find KDC" while impacket sailed through. So it's **not** "always for Kerberos" — it's "for the _system_ Kerberos tools," and `ssh -K` happens to be one.
 
-Edit `/etc/krb5.conf`:
+**First**: Add target DC to `/etc/resolv.conf` temporarily during test. Point DNS at the DC:
 
-**Make sure `/etc/krb5.conf` actually contains this:** 
+```
+# /etc/resolv.conf
+nameserver <DC_IP>
+```
+
+**Second**: Edit `/etc/krb5.conf`:
 
 Example for domain: `frizz.htb`, hostname: `frizzdc`
 
@@ -62,13 +67,7 @@ Example for domain: `frizz.htb`, hostname: `frizzdc`
     .frizz.htb = FRIZZ.HTB
     frizz.htb = FRIZZ.HTB
 ```
-
-Also helpful: Adding target DC to `/etc/resolv.conf` temporarily during test. Point DNS at the DC:
-
-```
-# /etc/resolv.conf
-nameserver <DC_IP>
-```
+And of course make sure to be in sync with target system clock. (ntpdate)
 
 ---
 
