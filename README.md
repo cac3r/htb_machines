@@ -30,7 +30,7 @@ How much outside help each box took:
 
 ```
 MachineName/
-├── README.md          # machine info, repo index and techniques
+├── README.md          # machine info, repo index, techniques and lesson/takeaway
 ├── testing.md         # raw working log
 ├── report.pdf         # clean professional report
 ├── attack_chain.png   # attack chain diagram
