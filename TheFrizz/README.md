@@ -20,7 +20,7 @@
 
 ---
 ---
-### Lesson
+### Lesson:
 #### Internal DB enumeration
 - When you have a shell on a box and find database credentials, you need _some_ way to talk to the database. You have two options — connect _remotely_ from your attack machine, or connect _locally_ from the shell you already have (LotL style). And frequently the database is **only listening on localhost** (bound to 127.0.0.1), not exposed to the network — which is actually good security practice.
 
