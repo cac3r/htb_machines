@@ -21,6 +21,16 @@
 ---
 ---
 ### Lesson
+#### Internal DB enumeration
+- When you have a shell on a box and find database credentials, you need _some_ way to talk to the database. You have two options — connect _remotely_ from your attack machine, or connect _locally_ from the shell you already have (LotL style). And frequently the database is **only listening on localhost** (bound to 127.0.0.1), not exposed to the network — which is actually good security practice.
+
+Common client binaries:
+- **MySQL / MariaDB** (`mysql` / `mysql.exe`) — extremely common, because it's the default database behind a huge fraction of web apps (the "M" in LAMP/WAMP stacks). Gibbon, WordPress, most PHP apps → MySQL. You'll see this a lot.
+- **MSSQL (Microsoft SQL Server)** — _the_ one to know for AD/Windows environments, and arguably more OSCP-relevant than MySQL for the AD side. Client tools: `sqlcmd`, or you connect with impacket's `mssqlclient.py`. MSSQL is huge because `xp_cmdshell` (saw on [EscapeTwo](https://github.com/cac3r/htb_machines/tree/main/escapetwo)) turns DB access into RCE. On Windows/AD boxes, MSSQL is often the star.
+- **PostgreSQL** (`psql`) — common with newer/Linux web apps.
+- **SQLite** — file-based, no server; you just read the `.db`/`.sqlite` file directly (sometimes with the `sqlite3` binary). Common in smaller apps.
+
+---
 #### Hashcat
 
 - `--username`: Used when a hash starts with a username identifier. Without it, hashcat thinks the username part is part of the hash to crack. It's a _parsing_ instruction for hashcat when it reads your file to crack. Alternatively you could just _not_ put the username in the file at all.
