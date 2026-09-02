@@ -63,7 +63,7 @@ Example for domain: `frizz.htb`, hostname: `frizzdc`
     frizz.htb = FRIZZ.HTB
 ```
 
-Also can help: Adding target DC to `/etc/resolv.conf` temporarily during test.
+Also helpful: Adding target DC to `/etc/resolv.conf` temporarily during test. Point DNS at the DC:
 
 ```
 # /etc/resolv.conf
