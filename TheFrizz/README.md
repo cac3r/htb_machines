@@ -40,7 +40,8 @@ Hash - Salt order:
 
 - **System/GSSAPI tools (`ssh -K`, `kinit`, `smbclient -k`, some others): DO need krb5.conf.** These use the operating system's _native_ Kerberos library, which reads `/etc/krb5.conf` to find the KDC. `ssh -K` is squarely in this camp — that's why it, specifically, threw "cannot find KDC" while impacket sailed through. So it's **not** "always for Kerberos" — it's "for the _system_ Kerberos tools," and `ssh -K` happens to be one.
 
-Edit /etc/krb5.conf:
+Edit `/etc/krb5.conf`:
+
 **Make sure `/etc/krb5.conf` actually contains this:** 
 
 Example for domain: `frizz.htb`, hostname: `frizzdc`
