@@ -14,7 +14,7 @@
 - `screenshots/`           - Supporting screenshots
 
 ---
-### Brief
+### Brief:
 ##### Foothold: CVE-2025-24071
 Starting the Assumed Compromise test on DC01.fluffy.htb using the given credentials for User `j.fleischman`. After network/host reconnaissance, authenticated to the exposed SMB service, discover READ and WRITE access to `IT` Share. This Share contains a PDF file for a previous vulnerability report containing a list of CVEs presumably found on the target system. Searching information about this CVEs on the internet find and use CVE-2025-24071 (second in the PDF list) that let's an attacker craft a malicious RAR/ZIP file that, at the point of extraction (unzip), Windows system tries to index the resource pointing to attacker's IP, triggering a SMB authentication (as the user that performed the action: `p.agila`) reaching the attacker controlled server, capturing and saving the user's NetNTLMv2 Hash. The Hash is cracked to recover the plaintext password. 
 ##### Domain escalation/pivot: ACL abuse, Shadow Credentials
