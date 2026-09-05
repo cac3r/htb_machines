@@ -92,6 +92,21 @@ Example for domain: `frizz.htb`, hostname: `frizzdc`
     .frizz.htb = FRIZZ.HTB
     frizz.htb = FRIZZ.HTB
 ```
+
+OR easier
+
+Create it with NetExec and copy it to `krb5.conf`
+
+```
+nxc smb <FQDN> --generate-krb5-file <file>.krb
+```
+
+Add it to `krb5.conf`
+
+```
+sudo cp <file>.krb /etc/krb5.conf
+```
+
 And of course make sure to be in sync with target system clock. (ntpdate)
 
 ---
