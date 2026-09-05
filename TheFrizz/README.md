@@ -13,6 +13,21 @@
 - [**`attack_chain.png`**](https://github.com/cac3r/htb_machines/blob/main/TheFrizz/attack_chain.png)   - Attack chain diagram
 - `screenshots/`           - Supporting screenshots
 
+---
+### Brief:
+##### Foothold: HTTP - Gibbon framework exploit - CVE-2023-45878
+Starting the test unauthenticated. After network/host reconnaissance, enumerating HTTP service, discover a website using Gibbon framework version 25.0.0. Looking up this technology version in www.cvedetails.com find various CVEs, pick and use CVE-2023-45878 (which affects versions below 25.0.1) to abuse the rights to write over a PHP file in the server, enabling to inject malicious PHP code to achieve RCE calling a GET to the writen file from browser, all this automated by a script https://raw.githubusercontent.com/davidzzo23/CVE-2023-45878/refs/heads/main/CVE-2023-45878.py. 
+This RCE is used to obtain a reverse shell, now with a PowerShell shell as the account running the web service `w.webservice`.
+##### Pivot -> `MrGibbonsDB`: SQL database user leaked credentials in config file
+Navigating and listing the contents of the web server directory, find a `config.php` file leaking a credential for the user for the SQL Database `MrGibbonsDB`.
+##### Pivot -> `f.frizzle`: Extraction of user Hash in DB table `gibbonperson`
+Now connected to the database `Gibbon` list tables and query for `gibbonperson` table, then to query for sensitive columns `username`, `passwordStrong`, `passwordStrongSalt`. Showing contents of this columns find one row containing the values for `f.frizzle`. This password hash and salt is formed to a hash in a file fed to hashcat to crack with mode 1420 (sha256, salt:pass), retrieving the plaintext password for User `f.frizzle`.
+##### Remote access as `f.frizzle`: SSH via kerberos auth (failed)
+With SSH service exposed and `f.frizzle` being a member of Remote Management User, using the credential to request a kerberos TGT since the target domain disables NTLM authentication. Passing this TGT with ssh -K to connect to the target machine encounter resolution and KDC, DNS errors, preventing connection, and therefore halting further progress after a significant amount of debugging, finishing the test at this point.
+
+*Post testing, the cause of errors is debated and noted. Coming to the conclusion that the attacker missed to include the target DC in the attacker system resolution and FQDN/realms in kerberos config files. Leaving test open to future attempts.*
+
+---
 ### Techniques:
 - CVE-2023-45878 for Gibbon framework < 20.0.1 exploitation
 - Database enumeration with mysql.exe via PowerShell
