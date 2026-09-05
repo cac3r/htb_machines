@@ -23,7 +23,7 @@ Navigating and listing the contents of the web server directory, find a `config.
 ##### Pivot -> `f.frizzle`: Extraction of user Hash in DB table `gibbonperson`
 Now connected to the database `Gibbon` list tables and query for `gibbonperson` table, then to query for sensitive columns `username`, `passwordStrong`, `passwordStrongSalt`. Showing contents of this columns find one row containing the values for `f.frizzle`. This password hash and salt is formed to a hash in a file fed to hashcat to crack with mode 1420 (sha256, salt:pass), retrieving the plaintext password for User `f.frizzle`.
 ##### Remote access as `f.frizzle`: SSH via kerberos auth (failed)
-With SSH service exposed and `f.frizzle` being a member of Remote Management User, using the credential to request a kerberos TGT since the target domain disables NTLM authentication. Passing this TGT with ssh -K to connect to the target machine encounter resolution and KDC, DNS errors, preventing connection, and therefore halting further progress after a significant amount of debugging, finishing the test at this point.
+With SSH service exposed and `f.frizzle` being a member of Remote Management Users, using the credential to request a kerberos TGT since the target domain disables NTLM authentication. Passing this TGT with ssh -K to connect to the target machine encounter resolution and KDC, DNS errors, preventing connection, and therefore halting further progress after a significant amount of debugging, finishing the test at this point.
 
 *Post testing, the cause of errors is debated and noted. Coming to the conclusion that the attacker missed to include the target DC in the attacker system resolution and FQDN/realms in kerberos config files. Leaving test open to future attempts.*
 
