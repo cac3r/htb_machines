@@ -27,6 +27,8 @@ With SSH service exposed and `f.frizzle` being a member of Remote Management Use
 
 *Post testing, the cause of errors is debated and noted. Coming to the conclusion that the attacker missed to include the target DC in the attacker system resolution and FQDN/realms in kerberos config files. Leaving test open to future attempts.*
 
+*On 2026-09-09 12:35, the test is reopened to resolve the errors encountered connecting via SSH with Kerberos. Proving and closing the chain till foothold, connected to a PowerShell session as `f.frizzle` to the target machine `frizzdc.frizz.htb`.*
+
 ---
 ### Techniques:
 - CVE-2023-45878 for Gibbon framework < 20.0.1 exploitation
