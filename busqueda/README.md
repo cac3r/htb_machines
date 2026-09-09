@@ -16,13 +16,13 @@
 ---
 ### Brief:
 ##### Foothold: `Searchor 2.4.0` exploit to run arbitrary system commands
-Starting the test on target system `busqueda` unauhenticated. After network/host enumeration, navigating the exposed web application on port 80, discover `Searchor 2.4.0` technology. Searching for known exploits for this version surfaces a public PoC abusing a injection of system commands on the search query parameter `engine`. Using https://github.com/nikn0laty/Exploit-for-Searchor-2.4.0-Arbitrary-CMD-Injection/blob/main/exploit.sh to automate the exploitation, an attacker can easily specify their local IP and port to run this exploit, achieving to execute python reverse shell code on the taget system, (with a running listener) obtaining a shell as the service account running the web service: `svc`.
+Starting the test on target system `busqueda` unauthenticated. After network/host enumeration, navigating the exposed web application on port 80, discover `Searchor 2.4.0` technology. Searching for known exploits for this version surfaces a public PoC abusing a injection of system commands on the search query parameter `engine`. Using https://github.com/nikn0laty/Exploit-for-Searchor-2.4.0-Arbitrary-CMD-Injection/blob/main/exploit.sh to automate the exploitation, an attacker can easily specify their local IP and port to run this exploit, achieving to execute python reverse shell code on the target system, (with a running listener) obtaining a shell as the service account running the web service: `svc`.
 
 ##### Sensitive data exposure (plaintext credentials in `.git/config`) + Credential reuse
-Navigating the file system as `svc`, list the contents of configuration files on the apache server directory. `/etc/apache2/sites-enabled/000-default.conf` leaks the existance of a Gitea service running locally on port 3000, with Vhost subdomain: `gitea.searcher.htb`. On the other hand, listing contents of `.git` directory configuration `/var/www/app/.git/config`  discover a credential set for `cody`, enabling to connect to Gitea with the credential. Furthermore, the password is discovered to be reused for `svc` account.
+Navigating the file system as `svc`, list the contents of configuration files on the apache server directory. `/etc/apache2/sites-enabled/000-default.conf` leaks the existence of a Gitea service running locally on port 3000, with Vhost subdomain: `gitea.searcher.htb`. On the other hand, listing contents of `.git` directory configuration `/var/www/app/.git/config`  discover a credential set for `cody`, enabling to connect to Gitea with the credential. Furthermore, the password is discovered to be reused for `svc` account.
 
 ##### Privilege Escalation: Abusing Relative-path execution flaw on script executable as root
-Having now the credential for `svc`, enumerating sudo privileges with `sudo -l`, discover python3 execution of `system-checkup.py` (`/usr/bin/python3 /opt/scripts/system-checkup.py`). The script presents 3 functionalities that are used to abuse the permission to run it. First  `docker-ps` argument is used to list running docker containers, identifying Gitea container ID (`960873171e2e`). Knowing this ID, using the next argument `docker-inspect` to dump the containers config, discovering `GITEA__database__PASSWD` field leaking a password for database, reused for administrator login at `gitea.searcher.htb`. Now logged in as administrator to Gitea can read the source code for all the scripts present,  `system-checkup.py` being one of them. Reading the script, it stands out that the function/action `full-checkup` calls a script `./full-checkup.sh` missing a full path scpecification from root `/`. This is abused by creating a "clone" file inside a writable directory `/dev/shm` with identical naming `full-checkup.sh`, editing to include a bash reverse shell payload reaching to the attacker specified remote system IP and port. Now, with this "clone" script present, the permission to run `system-checkup.py` is used to execute it for `full-checkup` action, calling current working directory "clone" file, executing the reverse shell code as `root`, granting the attacker a shell as `root`. At this point having administrator privileges inside the target system `busqueda`.
+Having now the credential for `svc`, enumerating sudo privileges with `sudo -l`, discover python3 execution of `system-checkup.py` (`/usr/bin/python3 /opt/scripts/system-checkup.py`). The script presents 3 functionalities that are used to abuse the permission to run it. First  `docker-ps` argument is used to list running docker containers, identifying Gitea container ID (`960873171e2e`). Knowing this ID, using the next argument `docker-inspect` to dump the containers config, discovering `GITEA__database__PASSWD` field leaking a password for database, reused for administrator login at `gitea.searcher.htb`. Now logged in as administrator to Gitea can read the source code for all the scripts present,  `system-checkup.py` being one of them. Reading the script, it stands out that the function/action `full-checkup` calls a script `./full-checkup.sh` missing a full path specification from root `/`. This is abused by creating a "clone" file inside a writable directory `/dev/shm` with identical naming `full-checkup.sh`, editing to include a bash reverse shell payload reaching to the attacker specified remote system IP and port. Now, with this "clone" script present, the permission to run `system-checkup.py` is used to execute it for `full-checkup` action, calling current working directory "clone" file, executing the reverse shell code as `root`, granting the attacker a shell as `root`. At this point having administrator privileges inside the target system `busqueda`.
 
 ---
 ### Techniques:
@@ -149,7 +149,7 @@ User svc may run the following commands on busqueda:
 - **`/usr/bin/python3 /opt/scripts/system-checkup.py`** — the specific command allowed: Python running a particular script.
 - **`*`** — a wildcard, meaning you can pass **any arguments** after the script name.
 
-If there is a `*` wilcard, may need to add anything after for it to function, and print the available arguments and/or syntax.
+If there is a `*` wildcard, may need to add anything after for it to function, and print the available arguments and/or syntax.
 
 ---
 ##### Abusing relative-path execution flaw in script executable as root
@@ -166,7 +166,7 @@ elif action == 'full-checkup':
         print('[+] Done!')
 ```
 
-23
+![](screenshots/23.png)
 
 The script is calling another script without full path from root. So, can create a `full-checkup.sh` that includes malicious code for a reverse shell. In this example, the script containing this flaw is a function called from an argument on a `system-checkup.py` that can be executed as root from a low-priv user. This can be used to elevate privileges, getting a shell as root (who executes it).
 
