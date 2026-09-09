@@ -8,9 +8,9 @@
 - Status: **Retired**
 
 ### Content:
-- [**`testing.md`**](https://github.com/cac3r/htb_machines/blob/main/<>/testing.md)                - Raw notes / working log
-- [**`report.pdf`**](https://github.com/cac3r/htb_machines/blob/main/<>/report.pdf)                - Professional report
-- [**`attack_chain.png`**](https://github.com/cac3r/htb_machines/blob/main/<>/attack_chain.png)   - Attack chain diagram
+- [**`testing.md`**](https://github.com/cac3r/htb_machines/blob/main/busqueda/testing.md)                - Raw notes / working log
+- [**`report.pdf`**](https://github.com/cac3r/htb_machines/blob/main/busqueda/report.pdf)                - Professional report
+- [**`attack_chain.png`**](https://github.com/cac3r/htb_machines/blob/main/busqueda/attack_chain.png)   - Attack chain diagram
 - `screenshots/`           - Supporting screenshots
 
 ---
