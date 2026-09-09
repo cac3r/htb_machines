@@ -377,17 +377,17 @@ Jenni_Luvs_Magic23
 ```
 ---
 
-Adding FQDN in first place to /etc/hosts 
-
-![](screenshots/A.png)
-
-Adding target DC to /etc/resolv.conf
-
-![](screenshots/B.png)
-
-Creating /etc/krb5.conf
+Adding FQDN in first place to `/etc/hosts` 
 
 ![](screenshots/32(post-testing).png)
+
+Adding target DC to `/etc/resolv.conf`
+
+![](screenshots/33(post-testing).png)
+
+Creating `/etc/krb5.conf`
+
+![](screenshots/34(post-testing).png)
 
 Updating clock to target DC
 
@@ -395,7 +395,7 @@ Updating clock to target DC
 sudo ntpdate 10.129.232.168
 ```
 
-![](screenshots/.png)
+![](screenshots/35(post-testing).png)
 
 Creating a Kerberos ticket for user `f.frizzle`
 
@@ -403,7 +403,7 @@ Creating a Kerberos ticket for user `f.frizzle`
 getTGT.py FRIZZ.HTB/f.frizzle:Jenni_Luvs_Magic23
 ```
 
-![](screenshots/.png)
+![](screenshots/36(post-testing).png)
 
 Connecting via SSH with the generated ticket
 
@@ -419,7 +419,7 @@ Context
 whoami; ipconfig
 ```
 
-![](screenshots/.png)
+![](screenshots/37(post-testing).png)
 
 User flag
 
@@ -427,7 +427,7 @@ User flag
 type c:\users\f.frizzle\desktop\user.txt
 ```
 
-![](screenshots/.png)
+![](screenshots/38(post-testing).png)
 
 user.txt: `e1c43840e904423c2852ff7a68c71c56`
 
