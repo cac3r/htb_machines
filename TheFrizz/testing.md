@@ -360,12 +360,101 @@ End: 2026-09-01, 17:15
 ---
 ---
 #### Post testing
+
+Resolving error connecting to SSH with Kerberos on 2026-09-09, 12:35
+
+IP:
+```
+10.129.232.168
+```
+
+Member of Remote Management Users, `j.frizzle` credential:
+```Username
+f.frizzle
+```
+```Password
+Jenni_Luvs_Magic23
+```
+---
+
+Adding FQDN in first place to /etc/hosts 
+
+![](screenshots/A.png)
+
+Adding target DC to /etc/resolv.conf
+
+![](screenshots/B.png)
+
+Creating /etc/krb5.conf
+
+![](screenshots/32(post-testing).png)
+
+Updating clock to target DC
+
+```
+sudo ntpdate 10.129.232.168
+```
+
+![](screenshots/.png)
+
+Creating a Kerberos ticket for user `f.frizzle`
+
+```
+getTGT.py FRIZZ.HTB/f.frizzle:Jenni_Luvs_Magic23
+```
+
+![](screenshots/.png)
+
+Connecting via SSH with the generated ticket
+
+```
+KRB5CCNAME=f.frizzle.ccache ssh -K f.frizzle@frizzdc.frizz.htb -v
+```
+
+Successful connection
+
+Context
+
+```
+whoami; ipconfig
+```
+
+![](screenshots/.png)
+
+User flag
+
+```
+type c:\users\f.frizzle\desktop\user.txt
+```
+
+![](screenshots/.png)
+
+user.txt: `e1c43840e904423c2852ff7a68c71c56`
+
+End: 2026-09-09, 13:00
+
+---
+---
 ##### Time frame
-Start: 2026-09-01, 12:10 - End: 2026-09-01, 15:00
+###### Testing session
+Start: 2026-09-01, 12:10
 
-Start: 2026-09-01 16:30 - End: 2026-09-01, 17:15
+End: 2026-09-01, 15:00
 
-Total time: 3h 35min
+Start: 2026-09-01 16:30
+
+End: 2026-09-01, 17:15
+
+Testing session Total time: 3h 35min
+
+###### Post-testing session
+Start: 2026-09-09, 12:35
+
+End: 2026-09-09, 13:00
+
+Post-testing session Total time: 25 min
+
+Total time Testing: 4h
 
 ##### Referenced
 - Discover CVE-2023-45878 for Gibbon framework < 20.0.1
