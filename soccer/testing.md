@@ -12,7 +12,7 @@ ports
 sudo nmap -p- -Pn -n -vv --min-rate=5000 10.129.56.3 -oG network/nmap_ports.txt
 ```
 
-01
+![](screenshots/01.png)
 
 SSH, HTTP, xmltec-xmlmail
 
@@ -24,7 +24,7 @@ service
 sudo nmap -p22,80,9091 -sCV 10.129.56.3 -oN network/nmap_service.txt
 ```
 
-02
+![](screenshots/02.png)
 
 SSH version: OpenSSH 8.2p1
 OS: Ubuntu Linux
@@ -34,13 +34,13 @@ Domain: soccer.htb
 
 Adding IP -Domain to /etc/hosts
 
-03
+![](screenshots/03.png)
 
 HTTP - Website
 
 Browsing: http://soccer.htb/
 
-04
+![](screenshots/04.png)
 
 Just a static page it seems
 
@@ -50,7 +50,7 @@ Technologies
 whatweb http://soccer.htb
 ```
 
-05
+![](screenshots/05.png)
 
 Bootstrap 4.1.1
 JQuery 3.2.1,3.6.0
@@ -62,20 +62,20 @@ Fuzzing
 ffuf -u http://soccer.htb/FUZZ -w /opt/wordlists/SecLists/Discovery/Web-Content/raft-medium-directories.txt
 ```
 
-06
+![](screenshots/06.png)
 
 `tiny`
 
 Browsing: http://soccer.htb/tiny/
 
-07
+![](screenshots/07.png)
 
 "Tiny File Manager" login panel
 (CCP Programmers at the button of the page)
 
 Looking at the source code (Ctrl + U)
 
-08
+![](screenshots/08.png)
 
 See tiny file manager repo https://tinyfilemanager.github.io/ and what it seems its version 2.4.3
 
@@ -83,7 +83,7 @@ Searching "tiny file manager 2.4.3" on internet
 
 Exploits surface right away
 
-09
+![](screenshots/09.png)
 
 Seems to be a path traversal with CVE-2021-45010
 
@@ -126,13 +126,13 @@ Dont find any information on how to probe port 9091 massaging service.
 
 Have error response on login 
 
-10
+![](screenshots/10.png)
 
 `Login failed. Invalid username or password`
 
 Have parameters
 
-11
+![](screenshots/11.png)
 
 `fm_usr`
 `fm_pwd`
@@ -153,7 +153,7 @@ Trying to connect to 9091
 telnet soccer.htb 9091
 ```
 
-12
+![](screenshots/12.png)
 
 Checking vhost
 
@@ -165,7 +165,7 @@ Nothing
 
 Searching for the discovered github link https://tinyfilemanager.github.io/
 
-13
+![](screenshots/13.png)
 
 The README specifies default credentials
 `admin:admin@123`
@@ -173,16 +173,16 @@ The README specifies default credentials
 
 Using admin
 
-14
+![](screenshots/14.png)
 
 Logged in. Lets use the exploit: https://github.com/febinrev/tinyfilemanager-2.4.3-exploit
 
-15
+![](screenshots/15.png)
 
 1. The script creates a HTTP request
 2. Leakes the web root directory to use on next step
 
-16
+![](screenshots/16.png)
 
 3. Adds various `../` for path traversal plus path from web root. Then creates the PHP file with malicious code for RCE and uploads it. Finally it seems to directly access the file uploaded to get a interactive shell for the user to type commands.
 
@@ -198,7 +198,7 @@ Using it:
 python3 tiny_file_manager_exploit.py http://soccer.htb/tiny/tinyfilemanager.php admin admin@123
 ```
 
-17
+![](screenshots/17.png)
 
 Is not working for neither credentials
 
@@ -212,7 +212,7 @@ Creating `hello123.php` file with PHP payload
 
 Uploading it at http://soccer.htb/tiny/tinyfilemanager.php?p=&upload
 
-18
+![](screenshots/18.png)
 
 Seems uploaded
 Destination folder (web root): /var/www/html/
@@ -237,15 +237,15 @@ Use it:
 
 Trying manually again on `uploads/` directory
 
-19
+![](screenshots/19.png)
 
 Clicking the Upload button. I missed that before
 
-20
+![](screenshots/20.png)
 
 Browsing for the file and cmd whoami http://soccer.htb/tiny/uploads/hello123.php?cmd=whoami
 
-21
+![](screenshots/21.png)
 
 Is working. RCE as `www-data`
 
@@ -271,7 +271,7 @@ Context
 whoami && ip a | grep inet
 ```
 
-22
+![](screenshots/22.png)
 
 Connected as `www-data` at `soccer` host with IP: 10.129.56.3
 
@@ -285,7 +285,7 @@ Listing internal ports
 ss -lntp
 ```
 
-23
+![](screenshots/23.png)
 
 See ports 3000 (web?), 3306 and 33060 (mysql) on localhost / 127.0.0.1
 
@@ -321,17 +321,17 @@ Checking `sites-enabled/`
 
 Listing contents of `soc-player.htb` discover a possible subdomain running on same port 80
 
-24
+![](screenshots/24.png)
 
 `soc-player.soccer.htb`
 
 Adding to /etc/hosts
 
-25
+![](screenshots/25.png)
 
 Browsing: http://soc-player.soccer.htb/
 
-26
+![](screenshots/26.png)
 
 Seems to be the same page but have more options
 `match` - Static page for matches, not interesting
@@ -340,19 +340,21 @@ Seems to be the same page but have more options
 
 Register
 
-27
+![](screenshots/27.png)
 
 Then login, redirected to `check`
 
-28
+![](screenshots/28.png)
 
 See a ticket ID, it seems the field is to check/validate tickets
 
 On burpsuite now see comunication to the 9091 port, it seems recieve the ticket ID specified in a simple JSON format and respond whether is valid or not
 
-29
+![](screenshots/29.png)
 
 Viewing source code notice JS code inside `<script>` tags, and what looks like a variable getting the ID that user inputs, thinking reflected XSS but not sure.
+
+![](screenshots/30.png)
 
 ---
 Hint: https://0xdf.gitlab.io/2023/06/10/htb-soccer.html. `SQL Injection over Websockets`
@@ -368,6 +370,8 @@ sqlmap -u ws://soc-player.soccer.htb:9091 --data '{"id": "1234"}' --dbms mysql -
 ```
 (command argument `--data` looked from hint/reference)
 
+![](screenshots/31.png)
+
 It identifies 2 injection types. Blind boolean-based and Blind time-based
 
 Enumerating databases (`--dbs`)
@@ -376,7 +380,7 @@ Enumerating databases (`--dbs`)
 sqlmap -u ws://soc-player.soccer.htb:9091 --data '{"id": "1234"}' --dbms mysql --batch --level 5 --risk 3 --dbs
 ```
 
-32
+![](screenshots/32.png)
 
 I assume the `soccer_db` is the interesting one
 
@@ -386,7 +390,7 @@ Enumerating tables in `soccer_db` (`-D <db> --tables`)
 sqlmap -u ws://soc-player.soccer.htb:9091 --data '{"id": "1234"}' --dbms mysql --batch --level 5 --risk 3 -D soccer_db --tables
 ```
 
-33
+![](screenshots/33.png)
 
 Table `accounts`
 
@@ -396,7 +400,7 @@ Listing contents in table `accounts` in db `soccer_db` (`-T <table> --dump`)
 sqlmap -u ws://soc-player.soccer.htb:9091 --data '{"id": "1234"}' --dbms mysql --batch --level 5 --risk 3 -D soccer_db -T accounts --dump
 ```
 
-34
+![](screenshots/34.png)
 
 New credential set:
 ```User
@@ -422,7 +426,7 @@ Context
 whoami && ip a | grep inet
 ```
 
-35
+![](screenshots/35.png)
 
 Connected as player to target system `soccer` with IP: 10.129.56.3
 
@@ -432,7 +436,7 @@ Getting user flag:
 cat /home/player/user.txt
 ```
 
-36
+![](screenshots/36.png)
 
 user.txt: `414bf146c0a81cc0a8e6d710f79393ab`
 
@@ -446,7 +450,7 @@ Enumerating sudo privileges
 sudo -l
 ```
 
-37
+![](screenshots/37.png)
 
 Cant run sudo at all
 
@@ -459,7 +463,7 @@ Looking for SetUID binaries
 find / -perm -4000 2>/dev/null
 ```
 
-38
+![](screenshots/38.png)
 
 It seem `doas` is the interesting one, being an alternative for `sudo` ("typically found on OpenBSD operating systems, but that can be installed on Debian-base Linux OSes like Ubuntu.")
 
@@ -469,7 +473,7 @@ Getting doas config
 find / -name doas.conf 2>/dev/null
 ```
 
-39
+![](screenshots/39.png)
 
 List content
 
@@ -477,7 +481,7 @@ List content
 cat /usr/local/etc/doas.conf
 ```
 
-40
+![](screenshots/40.png)
 
 Can execute `/usr/bin/dstat` as root
 
@@ -515,7 +519,7 @@ Can write `/usr/local/share/dstat`
 nano /usr/local/share/dstat/dstat_theplug.py
 ```
 
-41
+![](screenshots/41.png)
 
 Running it
 
@@ -531,7 +535,7 @@ Context
 whoami && ip a | grep inet
 ```
 
-42
+![](screenshots/42.png)
 
 Connected as root to the target system soccer with IP: 10.129.56.3
 
@@ -541,7 +545,7 @@ Capture root flag
 cat /root/root.txt
 ```
 
-43
+![](screenshots/43.png)
 
 root.txt: `da9fa9a824d7a76d1681bd7a460197dc`
 
