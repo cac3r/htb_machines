@@ -12,6 +12,8 @@
 - `screenshots/`           - Supporting screenshots
 
 ---
+---
+
 ### Brief:
 ##### Foothold: File Upload exploit on Tiny File Manager 2.4.3 using it's default credentials
 Starting the test against target system `soccer` unauthenticated. After network/host reconnaissance, probing the exposed HTTP web service on port 80, discover (by fuzzing) a `tiny/` directory, redirecting to a login page for `Tiny File Manager`. Viewing the source code note a link for the official repo of this technology and also the specific version (2.4.3). Searching for the fingerprinted technology discover a common exploit for versions before or equal 2.4.6, applying for target 2.4.3. This exploit consist of a path traversal vulnerability that enables authenticated users to upload PHP files for RCE. To obtain the credential for authentication, read the official documentation on GitHub, which specifies the default admin credentials used for first setup (`admin:admin@123`). Now with authentication exploiting the mentioned vulnerability uploading a malicious PHP file to `/tiny/uploads` achieving RCE and with a basic bash payload, a reverse shell as the account running the backend `www-data`. 
@@ -23,6 +25,8 @@ Navigating this new subdomain website, register and login to be redirected to `c
 Once in this shell as `player` via SSH, enumerate SUID binaries to discover `doas` presence. Reading its configuration `doas.conf` note the permission for the controlled user `player` to execute `dstat` as root. `dstat` is a known tool used for system information and stats. On its official manual, is explicit that anyone can create and use their own `dstat` plugins. Having write access to a commonly used system directory for this plugins can plant a malicious plugin to then run it with `dstat` as root (with `doas`), therefore enabling arbitrary code execution as root. Creating the plugin file with name pattern `dstat_<NAME>.py` and writing a oneline python script to spawn `/bin/bash` in the writable `/usr/local/share/dstat`. Executing it with `doas`, spawning a shell as root and finishing capturing `root.txt` flag.
 
 ---
+---
+
 ### Techniques:
 - Exploiting known File upload vulnerability on discovered technology `Tiny File Manager 2.4.3`
 - Reading `nginx` server configuration files
@@ -32,6 +36,8 @@ Once in this shell as `player` via SSH, enumerate SUID binaries to discover `doa
 - Abusing `/usr/bin/dstat` (system info tool) execution permission as root by creating a malicious plugin spawning `/bin/bash`, shell as root.
 
 ---
+---
+
 ### Lesson:
 ##### Lookup target technology/framework and read official documentation
 
