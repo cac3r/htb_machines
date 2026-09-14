@@ -9,6 +9,7 @@ Each machine folder has a raw working log, a clean report, and the attack chain 
 
 | Machine | OS | Difficulty | Type | User | Root | Dependence | Time | Date | 
 |---------|-----|-----------|------|----------|-------|------|-----|----|
+| [Union](./union) | Linux | Medium | Unauthenticated | X | X | Hint | 2h 40min |2026-09-13
 | [Soccer](./soccer) | Linux | Easy | Unauthenticated | X | X | Referenced | 4h 5min |2026-09-09
 | [Busqueda](./busqueda) | Linux | Easy | Unauthenticated | X | X | Referenced | 2h 10min |2026-09-08
 | [TheFrizz](./TheFrizz) | Windows | Medium | Unauthenticated | X |   | Referenced | 4h |2026-09-01/09
