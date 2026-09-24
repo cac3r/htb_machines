@@ -14,8 +14,8 @@
 ---
 ---
 ### Brief:
-#### Initial access: Session Highjack after reading `actuator/sessions`. Access to `/admin` dashboard
-Starting the test against the target system `cozyhosting` unauthenticated. After network/host reconnaissance, enumerating the website exposed at port 80 HTTP discover `/error` page. Searching the error message come to know this page is the default page set by Spring Boot Java framework. Fuzzing the web using a targeted wordlist for the fingerprinted framework (included in SecLists) to discover actuator funtions like `actuator/sessions` which contains a valid session/cookie for the user `kanderson`. This cookie is used to highjack the session and access the `/admin` dashboard. 
+#### Initial access: Session Hijack after reading `actuator/sessions`. Access to `/admin` dashboard
+Starting the test against the target system `cozyhosting` unauthenticated. After network/host reconnaissance, enumerating the website exposed at port 80 HTTP discover `/error` page. Searching the error message come to know this page is the default page set by Spring Boot Java framework. Fuzzing the web using a targeted wordlist for the fingerprinted framework (included in SecLists) to discover actuator funtions like `actuator/sessions` which contains a valid session/cookie for the user `kanderson`. This cookie is used to hijack the session and access the `/admin` dashboard. 
 #### System foothold: OS command injection in `/executessh` leading to RCE and shell as `app`
 In this dashboard find a functionality to include hosts (`/executessh`). This function uses the user controlled values from  `host` and `username` to conform and execute a command with ssh. The `username` parameter is injectable but the backend filters spaces (` `). Adding a separator (`;`) to append a new command and using brace expansion syntax (`{a,b}`) to bypass the filter allows to execute arbitrary commands. Base64 encoding a reverse shell payload and, with the prior syntax mentioned, conform the final payload (URL encoded). Executing it decodes the base64 and runs the reverse shell payload, obtaining a shell as user `app`. 
 #### Pivot to `postgres` db user: Reading Spring Boot configuration files - `application.properties`
@@ -173,4 +173,4 @@ To abuse set `ProxyCommand` to `/bin/sh` so instead of proxying, ssh runs `/bin/
 - Spring Boot error page, actuators and configuration/properties
 - OS command injection space filtering bypass with brace expansion
 - PostgreSQL (psql) command line syntax to enumerate database
-- Abuse of permision to run SSH (ssh) as root
+- Abuse of permission to run SSH (ssh) as root
