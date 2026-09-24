@@ -9,6 +9,7 @@ Each machine folder has a raw working log, a clean report, and the attack chain 
 
 | Machine | OS | Difficulty | Type | User | Root | Dependence | Time | Date | 
 |---------|-----|-----------|------|----------|-------|------|-----|----|
+| [CozyHosting](./cozyhosting) | Linux | Easy | Unauthenticated | X | X | Hint | 3h 45min |2026-09-24
 | [Validation](./validation) | Linux | Easy | Unauthenticated | X | X | Hint | 2h 15min |2026-09-15
 | [Union](./union) | Linux | Medium | Unauthenticated | X | X | Hint | 2h 40min |2026-09-13
 | [Soccer](./soccer) | Linux | Easy | Unauthenticated | X | X | Referenced | 4h 5min |2026-09-09
