@@ -43,7 +43,7 @@ Enumerating sudo privileges, find `josh` is permitted to execute `/usr/bin/ssh` 
 
 ##### Default error page:
 
-![[06 4.png]]
+![](screenshots/06.png)
 
 Whitelabel Error Page = Spring Boot
 
