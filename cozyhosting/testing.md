@@ -1,3 +1,4 @@
+## Testing
 Start: 2026-09-23, 09:30
 
 IP:
@@ -306,7 +307,7 @@ sudo ssh -F /root/root.txt x
 
 root.txt: `21003d5b468478ecbeba4930b4b1f6be`
 
-(this is possible becasuse the root.txt flag is known to normally live under /root/)
+(this is possible because the root.txt flag is known to normally live under /root/)
 
 Can also get a shell as root
 
