@@ -1,3 +1,4 @@
+## Testing
 Start: 2026-09-25 11:35
 
 IP:
@@ -171,10 +172,14 @@ cat /data/gitea/conf/app.ini
 
 ![](screenshots/17.png)
 
-database type: SQLite. 
+database type: SQLite.
+
 port 3306 is default for MySQL
+
 Path: `/data/gitea/gitea.db`. 
+
 user: root... 
+
 sqlite stores data plainly in the file
 
 ```
@@ -293,6 +298,7 @@ Stuck
 ---
 **Hint**: Vulnerable script in  `/opt/scripts`
 https://www.youtube.com/watch?v=2tQ3VhdwVsU&t - 16:40
+
 ---
 
 `identify_images.sh` under `/opt/scripts`
@@ -364,6 +370,7 @@ End: 2026-09-25 15:00
 #### Post testing
 ##### Time frame
 Start: 2026-09-25 11:35
+
 End: 2026-09-25 15:00
 
 Total time:  3h 25min
