@@ -19,9 +19,9 @@ Starting the test against the target system `titanic` unauthenticated. After net
 ### Initial access -> `git` account: CVE-2026-60004 - RCE via vulnerable Gitea version 1.22.1
 After adding the subdomain to attacker system `/etc/hosts` for DNS resolution, browse it and discover is used for Gitea. At the button of the page can fingerprint the Gitea version 1.22.1. Searching this version surfaces different CVEs, one highlighted affecting this version (CVE-2026-60004) enables arbitrary command execution by abusing Git hooks. A public PoC automates it with a python script, creating a user, then a repo, and exploiting this repo by writing the malicious hook in `/hooks`, achieving RCE as `git` and, after running a reverse shell, a shell as `git`.
 ### Pivot -> `developer` account: Gitea configuration > SQLite database > Hashes > Password reuse
-Navigating the system as `git` find the `gitea` binary under `/app`. Executing this binary prints different file paths including the path for Gitea configuration file. Reading this configurtation file, discloses the path for the database, in this case SQLite. Without required authentication, can enumerate and dump database contents, retrieving hashes for `administrator` and `developer`. Besides, identify the salt for each entry by querying the `salt` column, forming the complete hash (`salt:hash`). Passing this formed hashes to `gitea2hashcat.py` tool can convert this hashes to a  crackable format. Running hashcat with mode 10900, the `developer` hash cracked recovering the plaintext password `25282528`. The password is validated against the same identity `developer` but on OS level account, and the password turns out reused, and valid to authenticate via SSH to the target system.
+Navigating the system as `git` find the `gitea` binary under `/app`. Executing this binary prints different file paths including the path for Gitea configuration file. Reading this configuration file, discloses the path for the database, in this case SQLite. Without required authentication, can enumerate and dump database contents, retrieving hashes for `administrator` and `developer`. Besides, identify the salt for each entry by querying the `salt` column, forming the complete hash (`salt:hash`). Passing this formed hashes to `gitea2hashcat.py` tool can convert this hashes to a  crackable format. Running hashcat with mode 10900, the `developer` hash cracked recovering the plaintext password `25282528`. The password is validated against the same identity `developer` but on OS level account, and the password turns out reused, and valid to authenticate via SSH to the target system.
 ### Privilege escalation -> `root`: Library hijack in script running vulnerable ImageMagick 7.1.1-35
-Remotedly connected as `developer` to the target system via SSH, navigate `/opt/scripts` and find `identify_images.sh`, a shell script that is owned by root. This script (A.) uses ImageMagick to identify data/metadata from images within the web source `/opt/app/static/assets/images/`, (B.) is identified to run cronologically/periodically by comparing the output file the script produces (`metadata.log`) creation time against current system time. (C.) The ImageMagick version is 7.1.1-35, affected by a known exploit for versions equal or lower than 7.1.1-35. This presents a Library hijack vulnerablity that is exploited by creating a malicious library, writen to `/opt/app/static/assets/images/`. When the program runs, it loads the planted library and executes the code inside it. The code is set to include a reverse shell. Since the script is owned and ran by root, the reverse shell returns a shell as root, enabling to read the final flag `root.txt`.
+Remotely connected as `developer` to the target system via SSH, navigate `/opt/scripts` and find `identify_images.sh`, a shell script that is owned by root. This script (A.) uses ImageMagick to identify data/metadata from images within the web source `/opt/app/static/assets/images/`, (B.) is identified to run chronologically/periodically by comparing the output file the script produces (`metadata.log`) creation time against current system time. (C.) The ImageMagick version is 7.1.1-35, affected by a known exploit for versions equal or lower than 7.1.1-35. This presents a Library hijack vulnerability that is exploited by creating a malicious library, written to `/opt/app/static/assets/images/`. When the program runs, it loads the planted library and executes the code inside it. The code is set to include a reverse shell. Since the script is owned and ran by root, the reverse shell returns a shell as root, enabling to read the final flag `root.txt`.
 
 ---
 ---
@@ -40,13 +40,13 @@ Remotedly connected as `developer` to the target system via SSH, navigate `/opt/
 ---
 ### Lesson
 Lesson #1: Check system scripts (example location: `/opt/scripts`).
-Lesson #2: Scheduled/croned scripts can be identified by comparing a file the script creates to log information (classic log file) and the system current time. If both meet near coincidence can mean the script is scheduled/croned to run periodically. With pspy and enumerating cron configuration can identify them as well.
-Croned scripts executed by root are interesting as a low privilege without sudo privileges. If the script is vulnerable / presents a code flaw that permits RCE can be a potential path to escalate privileges locally. 
+Lesson #2: Scheduled/cron scripts can be identified by comparing a file the script creates to log information (classic log file) and the system current time. If both meet near coincidence can mean the script is scheduled/croned to run periodically. With `pspy` and enumerating cron configuration can identify them as well.
+Cron scripts executed by root are interesting as a low privilege without sudo privileges. If the script is vulnerable / presents a code flaw that permits RCE can be a potential path to escalate privileges locally. 
 
 ---
 ### Path traversal + LFI in file download functionality -> Read `/etc/hosts` -> Subdomain
 
-Website. Download function. Parameter to specify file to download (purposedly within web server). The downloaded file and the response contains the specified file contents. Path traversal to reach system paths and files. LFI, using this traversal to include files like `/etc/passwd`, `/etc/apache2/*`, `/etc/hosts` and reading contents in the response (or downloaded file). This last one containing DNS configuration disclosed a new subdomain.
+Website. Download function. Parameter to specify file to download (purposely within web server). The downloaded file and the response contains the specified file contents. Path traversal to reach system paths and files. LFI, using this traversal to include files like `/etc/passwd`, `/etc/apache2/*`, `/etc/hosts` and reading contents in the response (or downloaded file). This last one containing DNS configuration disclosed a new subdomain.
 
 Example in this test:
 
@@ -73,7 +73,7 @@ Reading `/etc/hosts`
 ---
 ### Gitea 1.17 – 1.27.0 RCE vulnerability
 
-Discovered a subdomain used for Gitea (to store/self-host and manage private code). At the button of the page can see the version, and searching this verson surfaces CVEs. The highlighted one is for RCE ([CVE-2026-60004](https://github.com/imbas007/CVE-2026-60004-POC)). "This abuses how Gitea's `diffpatch` API endpoint processes user-supplied Git patches". The script creates an account, then a repository, and delivers the exploit/hook with specified command to execute, printing the output. Used this RCE to run a reverse shell.
+Discovered a subdomain used for Gitea (to store/self-host and manage private code). At the button of the page can see the version, and searching this version surfaces CVEs. The highlighted one is for RCE ([CVE-2026-60004](https://github.com/imbas007/CVE-2026-60004-POC)). "This abuses how Gitea's `diffpatch` API endpoint processes user-supplied Git patches". The script creates an account, then a repository, and delivers the exploit/hook with specified command to execute, printing the output. Used this RCE to run a reverse shell.
 
 ```
 python3 cve-2026-60004-poc.py --url http://dev.titanic.htb --cmd "id"
@@ -99,7 +99,7 @@ After RCE and gaining a shell as the account running Gitea (`git`) navigate the 
 
 Example in this test:
 
-Moving arround the system, inside `/app` see `gitea` file but lisiting prints unreadable content.
+Moving around the system, inside `/app` see `gitea` file but listing prints unreadable content.
 Its a binary
 
 ```
@@ -152,7 +152,7 @@ Hashes for `administrator` and `developer`...
 ---
 ### Forming crackable hashes from raw Gitea database hashes and salts
 
-After dumping the database user table, have different encoded strings and algorithm. The large one can be identified as the password hash. Querying the salt column can identify the salt. Forming a hash with this 2 strings (`salt:hash`, or viceversa) can pass it to a tool ([gitea2hashcat](https://github.com/hashcat/hashcat/blob/master/tools/gitea2hashcat.py)) that converts it to a crackable format for hashcat. Cracking with mode 10900 (PBKDF2-HMAC-SHA256).
+After dumping the database user table, have different encoded strings and algorithm. The large one can be identified as the password hash. Querying the salt column can identify the salt. Forming a hash with this 2 strings (`salt:hash`, or vice versa) can pass it to a tool ([gitea2hashcat](https://github.com/hashcat/hashcat/blob/master/tools/gitea2hashcat.py)) that converts it to a crackable format for hashcat. Cracking with mode 10900 (PBKDF2-HMAC-SHA256).
 *The tool also have an option to read database directly*.
 
 Example in this test:
@@ -238,7 +238,7 @@ Compile it
 gcc -x c -shared -fPIC -o ./libxcb.so.1 shell.c
 ```
 
-Rename the xml to match what the script is specting (jpg)
+Rename the xml to match what the script is expecting (jpg)
 
 ```
 mv delegates.xml delegates.jpg
