@@ -9,6 +9,7 @@ Each machine folder has a raw working log, a clean report, and the attack chain 
 
 | Machine | OS | Difficulty | Type | User | Root | Dependence | Time | Date | 
 |---------|-----|-----------|------|----------|-------|------|-----|----|
+| [Blackfield](./blackfield) | Windows | Hard | Unauthenticated | X |   | Solo | 3h 55min |2026-10-05
 | [Networked](./networked) | Linux | Easy | Unauthenticated | X | X | Hint | 3h 20min |2026-10-02
 | [Titanic](./titanic) | Linux | Easy | Unauthenticated | X | X | Hint | 3h 25min |2026-09-25
 | [CozyHosting](./cozyhosting) | Linux | Easy | Unauthenticated | X | X | Hint | 3h 45min |2026-09-24
