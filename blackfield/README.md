@@ -17,11 +17,11 @@
 #### Initial access: Usernames disclosure + AS-REP roasting
 Starting the test against the target system DC01 unauthenticated. After network/host reconnaissance, enumerating shares as `guest` can READ `profiles$` share. Connected to this share listing contents notice several directories with potential domain usernames as directory names, copy all names and convert to a clean user wordlist. Using kerbrute to validate this users via kerberos auth, turns out with 3 valid users: `audit2020`, `svc_backup`, `support`. Checking for users with No-PreAuth set, using impacket tool getNPUsers, discover `support` have `UF_DONT_REQUIRE_PREAUTH` set, enabling to request TGT without a password required, capturing the user ASREP, and so its Net-NTLMv2 hash. This hash is cracked using mode 18200 (`$krb5asrep$23$`), obtaining plaintext password for `support`: `#00^BlackKnight`. Credential is confirmed valid.
 #### Pivot -> `audit2020`: ACL `ForceChangePassword` inbound control from `support`
-Enumerating Domain with BloodHound. Using rusthound collector and BH CE locally deployed web for graphic analysis. Discover owned account `support` has ForceChangePassword permission over `audit2020`, simply setting a new password remotedly with `net`. 
+Enumerating Domain with BloodHound. Using rusthound collector and BH CE locally deployed web for graphic analysis. Discover owned account `support` has ForceChangePassword permission over `audit2020`, simply setting a new password remotely with `net`. 
 #### Pivot -> `svc_backup`: LSASS dump in readable share
 Enumerating shares as `audit2020` discover READ permission over `forensic` share. This share contains a ZIP file `lsass.zip` that presents the LSASS memory "snapshot" file `lsass.DMP`. Save this file to local system and employ pypykatz tool to parse it offline and read its contents, saving NT hashes for `svc_backup`, `DC01$` and `Administrator`. The `scv_backup` NT hash is confirmed valid and, as it has Remote Management rights, Pass-the-Hash to establish a connection to the target DC01 via WinRM (Evil-WinRM for Linux).  *(user.txt)*
 #### Privilege Escalation: `SeBackupPrivilege` abuse
-Enumerating local privileges as `svc_bakcup` discover `SeBackupPrivilege`. This privilege permits to copy system files (as doing a backup), enabling to copy and save registry hives SAM (containing local users password hashes) and SYSTEM (containing system configuration -> boot key / syskey to decrypt SAM), decrypted and read using impacket's secretsdump, disclosing the Administrator NTLM hash. This hash (NTLM and NT part) is validated using tools like NetExec and Evil-WinRM Pass-the-Hash funtions, but out of timeouts, non responsive execution and unexpected errors unable to confirm or deny whether the Administrator NTLM hash is valid.
+Enumerating local privileges as `svc_bakcup` discover `SeBackupPrivilege`. This privilege permits to copy system files (as doing a backup), enabling to copy and save registry hives SAM (containing local users password hashes) and SYSTEM (containing system configuration -> boot key / syskey to decrypt SAM), decrypted and read using impacket's secretsdump, disclosing the Administrator NTLM hash. This hash (NTLM and NT part) is validated using tools like NetExec and Evil-WinRM Pass-the-Hash functions, but out of timeouts, non responsive execution and unexpected errors unable to confirm or deny whether the Administrator NTLM hash is valid.
 
 ---
 ---
@@ -124,7 +124,9 @@ impacket-secretsdump -sam sam.save -system system.save LOCAL
 ![](screenshots/30.png)
 
 Sources:
+
 https://www.hackingarticles.in/windows-privilege-escalation-sebackupprivilege/
+
 https://notes.lfgberg.org/windows/privesc/SeBackupPrivilege
 
 ##### Alternatives for ntds.dit:
@@ -159,7 +161,7 @@ Automates the NTDS extraction remotely.
 ---
 #### Questions & Answers:
 
-$Question #1$: Since LSASS memory updates with new logins, in real engagements, the attacker may dump LSASS periodically to observe any new entries?
+Question #1: Since LSASS memory updates with new logins, in real engagements, the attacker may dump LSASS periodically to observe any new entries?
 
 *(Claude Opus 4.8 response)*
 ##### The core problem: LSASS dumping is extremely "loud"
@@ -188,9 +190,9 @@ So in a _real_ engagement against a defended target, "dump LSASS every hour to c
 
 **Timing matters** — attackers _do_ think about _when_ to harvest: dumping LSASS right after a scheduled admin task runs, or when you know a privileged user logs in (e.g., during business hours), to catch high-value credentials _when they're present in memory_. So "harvest at the right moment" is real — it's just surgical (dump once, at the right time) rather than periodic (dump repeatedly).
 
-.....................................................................................................................................................
+............................................................................................................................................................................................................................................
 
-$Question #2$: What if the `DC01$` machine account NT hash recovered from LSASS dump would have been valid?
+Question #2: What if the `DC01$` machine account NT hash recovered from LSASS dump would have been valid?
 
 *(Claude Opus 4.8 response)*
 
