@@ -399,7 +399,7 @@ Wait few seconds
 
 Explore > Cypher > Saved Queries > Shortest path from owned objects
 
-Nothing that stands out as a escalation path, also no interesting AD enrollment/cerfificates 
+Nothing that stands out as a escalation path, also no interesting AD enrollment/certificates 
 
 Enumerating controlled account privileges
 
@@ -525,7 +525,7 @@ robocopy /b E:\Windows\ntds C:\temp\ntds.dit
 
 ![](screenshots/32.png)
 
-Is downloaded as a directory, without contents. Tried diferent times with different paths, synyax, ... 
+Is downloaded as a directory, without contents. Tried different times with different paths, syntax, ... 
 Connecting and working with evil-winrm is being tedious as is very slow and sometimes not connecting, hanging out thinking with simple commands. Extracting ntds.dit complicates. 
 Validating the obtained NTLM hash for administrator find neither the NTLM hash or NT part is working for nxc and sometimes nxc is even not responding with output. Its starting to be a lost of energy and time, ending the test now with doubts about administrator credential validity and only having obtained user.txt.
 
