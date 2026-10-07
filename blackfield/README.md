@@ -164,6 +164,7 @@ Automates the NTDS extraction remotely.
 Question #1: Since LSASS memory updates with new logins, in real engagements, the attacker may dump LSASS periodically to observe any new entries?
 
 *(Claude Opus 4.8 response)*
+
 ##### The core problem: LSASS dumping is extremely "loud"
 
 Here's the thing that reshapes your idea — **dumping LSASS is one of the single most-detected actions in all of offensive security.** Every modern EDR (endpoint detection) heavily monitors for LSASS access, because it's such a known credential-theft technique. So:
@@ -225,6 +226,7 @@ This is domain compromise — krbtgt hash lets you forge golden tickets, DA hash
 - Parse and read a LSASS dump file offline (`lsass.DMP`)
 - Abuse `SeBackupPrivilege` -> Copy SAM, SYSTEM, SECURITY, ntds.dit
 - DiskShadow and alternatives to extract ntds.dit
+
 Notes:
 - Extracting LSASS dumps is very noisy and detectable, be aware on real targets
 - Valid DC machine account hash -> DCSync
