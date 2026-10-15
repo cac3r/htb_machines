@@ -53,11 +53,11 @@ Browsing: http://return.htb/
 
 Printer Admin Panel. `index.php`
 
-Clcik Settings
+Click Settings
 
 ![](screenshots/06.png)
 
-Server address: `printer.return.local` (targert system, DC), port: 389 (LDAP)
+Server address: `printer.return.local` (target system, DC), port: 389 (LDAP)
 
 Username: `svc-printer`
 
@@ -119,9 +119,9 @@ impacket-GetNPUsers return.local/svc-printer -no-pass
 `User svc-printer doesn't have UF_DONT_REQUIRE_PREAUTH set`
 
 
-Updating the fields notice changing the server address takes a bit more to load. Setting reponder server, LDAP active by default, edit the server address to local IP where responder is running, click update and recieve plaintext password for svc-printer.
+Updating the fields notice changing the server address takes a bit more to load. Setting responder server, LDAP active by default, edit the server address to local IP where responder is running, click update and receive plaintext password for `svc-printer`.
 
-Setup reponder
+Setup responder
 
 ```
 sudo responder -I tun0
@@ -131,7 +131,7 @@ Update server address field with attacker IP
 
 ![](screenshots/11.png)
 
-In reponder tab
+In responder tab
 
 ![](screenshots/12.png)
 
@@ -202,7 +202,7 @@ put shell.php
 `NT_STATUS_ACCESS_DENIED opening remote file \inetpub\wwwroot\shell.php`
 
 
-Bloodhoud enumeration
+BloodHound enumeration
 
 Using rusthound collector
 
@@ -254,7 +254,7 @@ whoami ; ipconfig
 
 ![](screenshots/17.png)
 
-Connected as svc-printer to the targer system printer with IP: 10.129.95.241
+Connected as `svc-printer` to the target system printer with IP: 10.129.95.241
 
 ```
 whoami /priv
@@ -262,7 +262,7 @@ whoami /priv
 
 ![](screenshots/18.png)
 
-Various privileges, SeBackupPrivilege standing out the most for me
+Various privileges, `SeBackupPrivilege` standing out the most for me
 
 Downloading SAM and SYSTEM (make temp dir)
 
@@ -320,7 +320,7 @@ Server Operators privilege abuses: https://www.hackingarticles.in/windows-privil
 
 Following Server Operators privilege abuses it seems an attacker with this privilege can edit services configuration, injecting system commands and running them by stopping and rerunning the edited service.
 
-LIsting services
+Listing services
 
 ```
 services
@@ -330,7 +330,7 @@ services
 
 It looks like VMTools is an interesting and exploitable service
 
-Upload nc.exe
+Upload `nc.exe`
 
 ```
 upload nc.exe
@@ -394,7 +394,7 @@ End: 2026-10-14, 18:40
 
 Total time testing: 2h20min
 #### Techniques
-- LDAP Authentication triggered by attacker controlled destination address in printer setting functionality (web) - Reponder capture. Plaintext password
+- LDAP Authentication triggered by attacker controlled destination address in printer setting functionality (web) - Responder capture. Plaintext password
 - Member of Server Operators Group abuse - Edit VMTools service configuration `binPath` - Arbitrary system command execution as `NT AUTHORITY\SYSTEM`
 #### Sources
 - Server Operators privilege abuses: https://www.hackingarticles.in/windows-privilege-escalation-server-operator-group/
