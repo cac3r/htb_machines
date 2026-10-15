@@ -24,7 +24,7 @@ Connected as `svc-printer` to target system enumerate services running and ident
 ---
 ---
 ### Techniques:
-- LDAP Authentication triggered by attacker controlled destination address in printer setting functionality (web) - Reponder capture. Plaintext password
+- LDAP Authentication triggered by attacker controlled destination address in printer setting functionality (web) - Responder capture. Plaintext password
 - Member of Server Operators Group abuse - Edit VMTools service configuration `binPath` - Arbitrary system command execution as `NT AUTHORITY\SYSTEM`
 ---
 ---
@@ -32,7 +32,7 @@ Connected as `svc-printer` to target system enumerate services running and ident
 #### LDAP authentication capture
 
 Website presenting Printer administration panel. Settings allow to configure which LDAP server the printer talks to and what credentials it uses.
-This can be abused by setting a controlled system IP thats running Responder server, capturing the sent LDAP authentication.
+This can be abused by setting a controlled system IP that's running Responder server, capturing the sent LDAP authentication.
 
 (Claude Opus 4.8)(----------------------------------------------------------------------------------------------
 1. The printer tries to **authenticate to the LDAP server at the address you specified** — which is now _your machine_, not the real DC.
@@ -48,7 +48,7 @@ Example in this test:
 
 ![](screenshots/06.png)
 
-Updating the fields notice changing the server address takes a bit more to load. Setting reponder server, LDAP active by default, edit the server address to local IP where responder is running, click update and recieve plaintext password for svc-printer.
+Updating the fields notice changing the server address takes a bit more to load. Setting responder server, LDAP active by default, edit the server address to local IP where responder is running, click update and receive plaintext password for svc-printer.
 
 Setup reponder
 
@@ -93,7 +93,7 @@ Example in this test:
 
 Member of Server Operators Group.
 
-LIsting services
+Listing services
 
 ```
 services
