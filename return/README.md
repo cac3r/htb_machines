@@ -34,7 +34,8 @@ Connected as `svc-printer` to target system enumerate services running and ident
 Website presenting Printer administration panel. Settings allow to configure which LDAP server the printer talks to and what credentials it uses.
 This can be abused by setting a controlled system IP that's running Responder server, capturing the sent LDAP authentication.
 
-(Claude Opus 4.8)(----------------------------------------------------------------------------------------------
+*(Claude Opus 4.8)*
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------(
 1. The printer tries to **authenticate to the LDAP server at the address you specified** — which is now _your machine_, not the real DC.
 2. To authenticate, it sends the **stored `svc-printer` credentials** to that address.
 3. You’re running **Responder** (or a rogue LDAP listener) on your machine, which **captures** those credentials as they arrive.
@@ -42,7 +43,7 @@ This can be abused by setting a controlled system IP that's running Responder se
 This is called **“LDAP passback”**
 
 The printer is configured to use **plain LDAP on port 389** (not LDAPS on 636, and not using signing/channel-binding). Plain LDAP authentication (specifically the “simple bind” method) sends the **username and password in cleartext** over the connection.
-)--------------------------------------------------------------------------------------------------------------------------
+)---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Example in this test:
 
@@ -74,13 +75,15 @@ Members of Server Operators can manage (start, stop, and configure) Windows serv
 Windows services run as powerful accounts, most run as `NT AUTHORITY\SYSTEM` (the highest local privilege, above administrator).
 A service has a configuration that includes its `binPath`, the executable (command) that runs when the service starts.
 
-(Claude Opus 4.8)(----------------------------------------------------------------------------------------------
+*(Claude Opus 4.8)*
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------(
 1. You’re in **Server Operators** → you can **reconfigure services**.
 2. You pick a service that runs as **SYSTEM** (here, VMTools).
 3. You **change its `binPath`** to _your_ command (instead of the real service executable).
 4. You **restart the service** → Windows executes your command **as SYSTEM** (because that’s the account the service runs as).
 5. → SYSTEM-level code execution.
-)--------------------------------------------------------------------------------------------------------------------------
+
+)---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Other ways to abuse:
 - Add yourself to local administrators
