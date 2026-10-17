@@ -53,6 +53,7 @@ https://github.com/nikn0laty/Exploit-for-Dolibarr-17.0.0-CVE-2023-30253
 ![](screenshots/10.png)
 
 This CVE-2023-30253 allows PHP Code Injection, but need valid authentication
+
 Back in login.
 
 First try with admin:admin and redirected to admin panel, with error of Access denied.
@@ -102,7 +103,9 @@ In `/var/www/html/crm.board.htb/htdocs/conf` list contents of `conf.php`, contai
 ![](screenshots/14.png)
 
 Database name: `dolibarr`
+
 Username: `dolibarrowner`
+
 Password: `serverfun2$2023!!`
 
 ---
@@ -116,7 +119,7 @@ Script allowlists paths that come from `/dev/`, so can start the path from `/dev
 
 Automated exploitation using: https://github.com/KaoXx/CVE-2022-37706/blob/main/exploit.sh
 
-![](screenshots/21.png)
+![](screenshots/21-CVE202237706-script(post-testing).png)
 
 1. Script checks whether the SUID binary exists in the system
 2. Makes temporary directories (`/tmp`)
