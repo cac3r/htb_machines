@@ -38,7 +38,7 @@ Connected as `larissa` enumerate SUID binaries and discover `enlightenment_sys` 
 
 https://github.com/nikn0laty/Exploit-for-Dolibarr-17.0.0-CVE-2023-30253
 
-Dolabarr is an open source CRM ([Customer Relationship Management](https://www.ibm.com/think/topics/erp-vs-crm)). 
+Dolibarr is an open source CRM ([Customer Relationship Management](https://www.ibm.com/think/topics/erp-vs-crm)). 
 Dolibarr lets authenticated users build web pages/sites inside the application (a CMS-like feature). This is why having authentication (in this case from default admin credential) can create a website and a page including malicious code that is executed by the server. 
 The backend filters php tags (`<?php`) but is bypassed because it fails to block the tag in uppercase (`<?PHP`) , executing the PHP code.
 
