@@ -38,12 +38,12 @@ In the NSClient++ software initialization/configuration file `nsclient.ini` obse
 
 ![](screenshots/18.png)
 
-Only allowed host is localhost/127.0.0.1 and have a password
-With host reconnaissance discovered the NSClient++ app is running on port 8443
+Only allowed host is localhost/127.0.0.1 and have a password.
+
+With host reconnaissance discovered the NSClient++ app is running on port 8443.
 
 ##### Setup port forwarding using SSH
-Enter SSH command mode
-Type ENTER then `~C`
+Enter SSH command mode: Type ENTER then `~C`
 
 ```
 -L 8443:127.0.0.1:8443
