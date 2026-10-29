@@ -9,6 +9,7 @@ Each machine folder has a raw working log, a clean report, and the attack chain 
 
 | Machine | OS | Difficulty | Type | User | Root | Dependence | Time | Date | 
 |---------|-----|-----------|------|----------|-------|------|-----|----|
+| [ServMon](./servmon) | Windows | Easy | Unauthenticated | X |   | Solo | 2h |2026-10-28
 | [BoardLight](./boardlight) | Linux | Easy | Unauthenticated | X | X | Solo | 2h 30min |2026-10-16
 | [Return](./return) | Windows | Easy | Unauthenticated | X | X | Solo | 2h 20min |2026-10-14
 | [Blackfield](./blackfield) | Windows | Hard | Unauthenticated | X |   | Solo | 3h 55min |2026-10-05
