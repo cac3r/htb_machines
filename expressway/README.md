@@ -76,7 +76,7 @@ Trying to crack with mode `5400` using hashcat
 hashcat -m 5400 handshake.txt rockyou.txt
 ```
 
-08
+![](screenshots/08.png)
 
 Cracked
 Password: `freakingrockstarontheroad`
