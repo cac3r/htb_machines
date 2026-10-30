@@ -36,7 +36,7 @@ Running `linpeas.sh` (PEAS-ng), the tool calls out Sudo version 1.9.17 is vulner
 What runs over 500/udp is IKE (Internet Key Exchange), which uses ISAKMP. It’s the handshake that sets up an IPsec tunnel. 
 It runs in either **Main Mode** or **Aggressive Mode** to establish a secure channel between the two peers.
 **Aggressive Mode with PSK** is the classic weakness. In Aggressive Mode, the endpoint sends back a hash of the pre-shared key during the handshake before authentication completes. You can capture that hash and crack it offline to recover the plaintext PSK.
-The system running IKE is the gateway, the guarded front door endpoint. It’s a **dedicated gateway device** out front, firewall or VPN concentrator, that terminates the tunnel. The internal servers sit behind it and aren’t directly reachable from the internet. The gateway is the one machine deliberately exposed to accept VPN connections.
+"The system running IKE is the gateway, the guarded front door endpoint. It’s a **dedicated gateway device** out front, firewall or VPN concentrator, that terminates the tunnel. The internal servers sit behind it and aren’t directly reachable from the internet. The gateway is the one machine deliberately exposed to accept VPN connections."
 
 Example in this test:
 
@@ -91,7 +91,7 @@ A bigger trend: **Zero Trust Network Access (ZTNA)**. Instead of one gateway tha
 
 Sudo version is vulnerable. Version 1.9.17. The vulnerability allows a local user to obtain root access because /etc/nsswitch.conf can be loaded from a user-controlled directory when the chroot option is used.
 
-Normally sudo should read the real `/etc/nsswitch.conf`. The flaw is that when you use `--chroot`, sudo resolves and reads `nsswitch.conf` from inside the directory the user controlls, and does this while still running as root.
+Normally sudo should read the real `/etc/nsswitch.conf`. The flaw is that when you use `--chroot`, sudo resolves and reads `nsswitch.conf` from inside the directory the user controls, and does this while still running as root.
 
 https://github.com/kh4sh3i/CVE-2025-32463
 
