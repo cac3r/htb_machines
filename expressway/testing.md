@@ -155,7 +155,7 @@ Give execution permission
 Nothing stands out but kernel exploits CVEs
 
 ---
-HInt: https://www.youtube.com/watch?v=XAsuxQCBVmY min 11:25 - sudo version is vulnerable
+Hint: https://www.youtube.com/watch?v=XAsuxQCBVmY min 11:25 - sudo version is vulnerable
 
 ---
 From linpeas output
@@ -183,7 +183,7 @@ Downloading the script:
 wget https://raw.githubusercontent.com/kh4sh3i/CVE-2025-32463/refs/heads/main/exploit.sh
 ```
 
-Transfrer via SSH
+Transfer via SSH
 
 ```
 scp exploit.sh ike@expressway.htb:/home/ike/
