@@ -504,7 +504,7 @@ a\u0027 \u0053\u0045\u004c\u0045\u0043\u0054 1,2,\u0055\u004e\u0049\u004f\u004e 
 null
 
 ---
-(Changed IP after machine reset) (**Add another Header in Report narrative**)
+(Changed IP after machine reset)
 ```IP
 10.129.96.37
 ```
