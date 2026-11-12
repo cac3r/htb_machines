@@ -192,7 +192,7 @@ So in a _real_ engagement against a defended target, "dump LSASS every hour to c
 
 **Timing matters** — attackers _do_ think about _when_ to harvest: dumping LSASS right after a scheduled admin task runs, or when you know a privileged user logs in (e.g., during business hours), to catch high-value credentials _when they're present in memory_. So "harvest at the right moment" is real — it's just surgical (dump once, at the right time) rather than periodic (dump repeatedly).
 
-............................................................................................................................................................................................................................................
+....................................................................................................................................................................................................................................
 
 Question #2: What if the `DC01$` machine account NT hash recovered from LSASS dump would have been valid?
 
