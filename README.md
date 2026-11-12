@@ -9,6 +9,7 @@ Each machine folder has a raw working log, a clean report, and the attack chain 
 
 | Machine | OS | Difficulty | Type | User | Root | Dependence | Time | Date | 
 |---------|-----|-----------|------|----------|-------|------|-----|----|
+| [Multimaster](./multimaster) | Windows | Insane | Unauthenticated | X |   | Referenced | +10h |2026-11-09/10/11
 | [Expressway](./expressway) | Linux | Easy | Unauthenticated | X | X | Hint | 1h 10min |2026-10-29
 | [ServMon](./servmon) | Windows | Easy | Unauthenticated | X |   | Solo | 2h |2026-10-28
 | [BoardLight](./boardlight) | Linux | Easy | Unauthenticated | X | X | Solo | 2h 30min |2026-10-16
