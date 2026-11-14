@@ -1,3 +1,4 @@
+## Builder
 ### Info:
 - Name: **Builder**
 - OS: **Linux**
@@ -69,7 +70,7 @@ Reading `/var/jenkins_home/users/users.xml`
 
 Id for jennifer user: `jennifer_12108429903186576833`
 
-Reading this file discloses account IDs, can be used in next step to read per user configuration which contains information about user, and the user password hash (in this example `bcrypt $2*$, Blowfish (Unix)`, labled with `jbcrypt` prefix in the config file)
+Reading this file discloses account IDs, can be used in next step to read per user configuration which contains information about user, and the user password hash (in this example `bcrypt $2*$, Blowfish (Unix)`, labeled with `jbcrypt` prefix in the config file)
 
 Per **account `config.xml` file**: `<Jenkins_root>/users/<account_ID>/config.xml`
 
@@ -105,7 +106,7 @@ RCE as `jenkins`.
 
 Standard Bash reverse shell did not work, but having clear output the target system can be enumerated and navigated via this Jenkins GUI.
 
-Besides command execution, can absue the script function to decrypt secrets that may be stored in the app Crendentials. In this example, a SSH private key was stored under a entry in Credentials. See next point.
+Besides command execution, can abuse the script function to decrypt secrets that may be stored in the app Credentials. In this example, a SSH private key was stored under a entry in Credentials. See next point.
 
 ##### Reading confidential secret (SSH private Key) stored in Jenkins Credentials
 
@@ -116,7 +117,7 @@ Dashboard > Credentials > `<credential_entry>` > ...
 Click Update. Scrolling down, see a private key is concealed for Confidentiality, but can be read with DevTools.
 
 Access DevTools (F12):
-1. Click "Pick elements" funtionality (top left corner)
+1. Click "Pick elements" functionality (top left corner)
 2. Click on `Concealed for Confidentiality`
 3. Watch private key disclose in source code
 
@@ -134,7 +135,7 @@ println( hudson.util.Secret.decrypt("<{ENCRYPTED_STRING}>") )
 
 Using the script function to decrypt the string. With this command can recover the SSH private key.
 
-Narrow private key permissions to user (`600`) and connect via SSH (in this example the private key was stored under `root` name and belogs to this account)
+Narrow private key permissions to user (`600`) and connect via SSH (in this example the private key was stored under `root` name and belongs to this account)
 
 ```
 ssh -i id_rsa root@10.129.230.220
