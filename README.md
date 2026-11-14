@@ -40,6 +40,7 @@ How much outside help each box took:
 - **Hint** — got unstuck with writeup/video at a single point, just a hint for direction/debugging
 - **Referenced** — followed a writeup/video at some point
 
+*("Time" column represents active / hands on testing, excluding any break or non-testing time)*
 #### Per-machine structure
 
 ```
