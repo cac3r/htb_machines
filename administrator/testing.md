@@ -131,7 +131,7 @@ Explore > SEARCH > "olivia" > right click object > Add to Owned
 
 Administration > BloodHound Configuration > Analyze Now
 
-Explore > CYPHER > "Shortest paths from Owned objetcs"
+Explore > CYPHER > "Shortest paths from Owned objects"
 
 ![](screenshots/09.png)
 
@@ -223,7 +223,7 @@ nxc smb DC -u 'benjamin' -p 'SETpass321_2'
 
 ![](screenshots/13.png)
 
-Passsword changed, new credential
+Password changed, new credential
 ```
 Benjamin
 ```
@@ -316,7 +316,7 @@ john administrator.hash --wordlist=/opt/wordlists/rockyou.txt
 
 `tekieromucho` (?)
 
-Cant open using the previous comunity tool, using official package for linux: https://github.com/pwsafe/pwsafe/releases?q=non-windows&expanded=true (`passwordsafe-debian12-1.26.1-amd64.deb`)
+Cant open using the previous community tool, using official package for linux: https://github.com/pwsafe/pwsafe/releases?q=non-windows&expanded=true (`passwordsafe-debian12-1.26.1-amd64.deb`)
 
 ```
 sudo dpkg -i passwordsafe-debian12-1.26.1-amd64.deb
@@ -382,7 +382,7 @@ UXLCI5iETUsIBoFVTj8yQFKoHjXmb
 
 Add emily to Owned objects and refresh data
 
-Explore > CYPHER > "Shortest paths from Owned objetcs"
+Explore > CYPHER > "Shortest paths from Owned objects"
 
 ![](screenshots/23.png)
 
@@ -392,7 +392,7 @@ Emily is a member of RMU
 
 Abusing Emily `GenericWrite` over Ethan
 
-Employing shadow credentials technique. Generating key pair, writing public key to account atribute (`msDS-KeyCredentialLink`) and using private key to authenticate using kerberos passwordless login (PKINIT)
+Employing shadow credentials technique. Generating key pair, writing public key to account attribute (`msDS-KeyCredentialLink`) and using private key to authenticate using Kerberos passwordless login (PKINIT)
 
 Using certipy
 
@@ -503,4 +503,4 @@ Total time: 2h 50min
 - Comunity tools to open PSAFE3 files: https://github.com/ronys/pypwsafe and https://github.com/marcbutler/libpsafe3 (better use official app)
 - Extracting pwsafe file master key hash example: https://defr0ggy.github.io/research/Compromising-Open-Source-Password-Safes/
 - Hashcat modes (search "Password Safe v3"): https://hashcat.net/wiki/doku.php?id=example_hashes
-- Password Safe offical linux app: https://github.com/pwsafe/pwsafe/releases?q=non-windows&expanded=true (`passwordsafe-debian12-1.26.1-amd64.deb`)
+- Password Safe official Linux app: https://github.com/pwsafe/pwsafe/releases?q=non-windows&expanded=true (`passwordsafe-debian12-1.26.1-amd64.deb`)
