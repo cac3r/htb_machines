@@ -19,13 +19,13 @@
 Starting the test against the target system `DC.ADMINISTRATOR.HTB` authenticated as this is an assumed compromise engagement. After host reconnaissance and basic domain enumeration, enumerating with BloodHound discover a chain of ACL controls that can be abused to harvest domain user credentials.
 #### Credential Harvesting & Pivoting
 ##### ACL: GenericAll / ForceChangePassword -> Reset passwords
-Starting with owned object `Olivia` GenericAll control over `Michael`, reseting the latter account password. The same is done from now owned `Michael`, abusing ForceChangePassword control over `Benjamin`.
+Starting with owned object `Olivia` GenericAll control over `Michael`, resetting the latter account password. The same is done from now owned `Michael`, abusing ForceChangePassword control over `Benjamin`.
 ##### Password Database exposed > Crack Master key > Disclose 3 credentials > 1 valid
 As `Benjamin` discover permission to login to FTP, connecting and finding a Password Safe v3 database file (`Backup.psafe3`). Using john utility `pwsafe2john` can extract the master key hash for the database file, and crack it using common password list rockyou.txt, recovering plaintext master key (`tekieromucho`). Downloading the official Password Safe software can open the database file and disclose 3 crendentials, one of them being valid for domain user authentication (`Emily:UXLCI5iETUsIBoFVTj8yQFKoHjXmb`).
 ##### ACL: GenericWrite -> Targeted Kerberoast
 Refreshing BloodHound data after new owned objects were added, reveal another chain of ACL permissions from `Emily` account that lead to full domain compromise. Starting with `Emily` GenericWrite control over `Ethan`, abused by setting SPN, request a TGS and capture the TGS response "service" password hash, cracked with mode `13100` and rockyou.txt password list, recovering plaintext password (`limpbizkit`).
 #### Full compromise: DCSync
-As `Ethan` have replacation permission over the domain, enables to abuse the directory replication protocol and disclose all domain NTLM hashes, including the DC `Administrator` (Domain Administrator) and `krbtgt` top tier accounts. The `Administrator` NT hash is used to Pass-the-Hash via WinRM, establishing a remote connection to the target DC as a Domain Administrator with full control over the `ADMINISTRATOR.HTB` domain.
+As `Ethan` have replication permission over the domain, enables to abuse the directory replication protocol and disclose all domain NTLM hashes, including the DC `Administrator` (Domain Administrator) and `krbtgt` top tier accounts. The `Administrator` NT hash is used to Pass-the-Hash via WinRM, establishing a remote connection to the target DC as a Domain Administrator with full control over the `ADMINISTRATOR.HTB` domain.
 
 ---
 ---
