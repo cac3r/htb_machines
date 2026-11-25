@@ -9,6 +9,7 @@ Each machine folder has a raw working log, a clean report, and the attack chain 
 
 | Machine | OS | Difficulty | Type | User | Root | Dependence | Time | Date | 
 |---------|-----|-----------|------|----------|-------|------|-----|----|
+| [Voleur](./voleur) | Windows | Medium | Assumed Compromise | X |   | Solo | 4h 50min |2026-11-24
 | [Administrator](./administrator) | Windows | Medium | Assumed Compromise | X | X | Solo | 2h 50min |2026-11-18
 | [Builder](./builder) | Linux | Medium | Unauthenticated | X | X | Hint | 2h |2026-11-12
 | [Multimaster](./multimaster) | Windows | Insane | Unauthenticated | X |   | Referenced | +10h |2026-11-09/10/11
