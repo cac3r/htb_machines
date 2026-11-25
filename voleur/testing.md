@@ -11,7 +11,7 @@ Given credential:
 ```User
 ryan.naylor
 ```
-```Passsword
+```Password
 HollowOct31Nyt
 ```
 ---
@@ -191,7 +191,7 @@ msoffcrypto-tool Access_Review.xlsx Access_Review_decrypted.xlsx -p 'HollowOct31
 
 `msoffcrypto.exceptions.InvalidKeyError: The file could not be decrypted with this password`
 
-Using strings can observe some strings lokking like a hash
+Using strings can observe some strings like a hash, salt, key...
 
 ```
 strings Access_Review.xlsx
@@ -371,7 +371,7 @@ nxc ldap 10.129.101.148 --use-kcache --bloodhound --collection All --kdcHost DC.
 
 ![](screenshots/25.png)
 
-Now Uploading ZIP process inmediatly as usual. Continuing.
+Now Uploading ZIP process immediately as usual. Continuing.
 
 - `Explore > SEARCH > "ryan.naylor" > right click object > Add to Owned`
 - `Explore > SEARCH > "svc_ldap" > right click object > Add to Owned`
@@ -570,5 +570,5 @@ Total time Testing = 4h 50m
 ##### Sources
 - Access Review xlsx files info: https://policyseed.io/templates/access-review
 - Usage of `msoffcrypto-tool`: https://isc.sans.edu/diary/25826
-- Hascat modes table: https://hashcat.net/wiki/doku.php?id=example_hashes
+- Hashcat modes table: https://hashcat.net/wiki/doku.php?id=example_hashes
 - NetExec release adding ingestor for BH CE: https://github.com/Pennyw0rth/NetExec/releases/tag/v1.5.0
